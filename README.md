@@ -1,7 +1,7 @@
 # algo2-tp1
 Trabajo práctico de especificación de Algoritmos II
 
-## Notas sobre enunciado
+## Notas sobre enunciado
 
 - Rondas
 - Multiples PJ
