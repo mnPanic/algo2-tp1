@@ -3,11 +3,6 @@ Trabajo práctico de especificación de Algoritmos II
 
 ## Notas sobre enunciado
 
-- Rondas
-- Multiples PJ
-- Cada ronda se agrega un fantasma que repite las acciones del PJ que lo eliminó
-- El objetivo del juego es que los PJ sobrevivan la mayor cantidad de rondas
-
 - Habitación: Grilla cuadrada con casilleros
   - Casilleros
     - Libres
@@ -19,6 +14,7 @@ Trabajo práctico de especificación de Algoritmos II
   - Solaparse sobre un casillero no tiene efectos para ninguno
 
 - Personaje (PJ)
+  - Puede haber mas de uno
   - Tiene dirección en la que mira
   - Acciones
     - Nada
