@@ -8,13 +8,6 @@ generos
 acción
 ```
 
-otras operaciones
------------------
-
-```text
-ubicacionLuegoDe : accion x hab h x ubicacion u -> ubicacion    {esValida(h, pos(u))}
-```
-
 igualdad observacional
 ----------------------
 
@@ -25,6 +18,16 @@ igualdad observacional
 (derecha    =obs derecha) ^
 (disparar   =obs disparar) ^
 (nada       =obs nada)
+```
+
+otras operaciones
+-----------------
+
+```text
+ubicacionLuegoDe : accion x hab h x ubicacion u -> ubicacion    {esValida(h, pos(u))}
+
+posicionesAfectadasPor : accion a x hab h x ubicacion u -> conj(pos) {esValida(h, pos(u))}
+// No tiene en cuenta la posición desde la cual se dispara.
 ```
 
 generadores
@@ -69,4 +72,7 @@ ubicacionLuegoDe(izquierda, h, < <x, y>, dir >) ==
     then < x - 1, y >
     else < x, y >
     fi), "izquierda">
+
+
+// TODO: Axiomatizar posicionesAfectadas @Gasti
 ```
