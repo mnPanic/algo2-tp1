@@ -93,5 +93,5 @@ verificar_alcance_pos(h, ps, p) == if ø?(ps)
                                          verificar_alcance_pos(h, p, sinUno(ps)))
                                    fi
 
-// TODO: axiomatizar posiciones
+// TODO: axiomatizar posiciones @Schuster
 ```
