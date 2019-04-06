@@ -6,12 +6,15 @@ TAD Habitación
 
 generos
 -------
+
+```text
 hab
+```
 
 observadores
 ------------
 
-```
+```text
 es_valida? : hab x pos -> bool
 esta_ocupada? : hab h x pos c -> bool           {esValida?(c, h)}
 ```
@@ -19,7 +22,7 @@ esta_ocupada? : hab h x pos c -> bool           {esValida?(c, h)}
 igualdad observacional
 ----------------------
 
-```
+```text
 (V h1, h2 : hab) (h1 =obs h2) <=>
     (V c : pos) esValida(c, h1) =obs esValida(c, h2) ^L
                   esValida(c, h1) =>L (estaOcupada? (c, h1) =obs estaOcupada?(c, h2))
@@ -28,7 +31,7 @@ igualdad observacional
 generadores
 -----------
 
-```
+```text
 nueva : nat n -> hab                        {n > 1}
 ocupar : hab h x pos c -> hab               {esValida?(c, h) ^L not esta_ocupada(c)}
 ```
@@ -36,7 +39,7 @@ ocupar : hab h x pos c -> hab               {esValida?(c, h) ^L not esta_ocupada
 otras operaciones
 -----------------
 
-```
+```text
 tamaño : hab -> nat
 
 es_conexa? : hab -> bool
@@ -54,7 +57,8 @@ es_alcanzable : hab x pos x pos -> bool
 
 axiomatización
 --------------
-```
+
+```text
 es_valida?(p, nueva(n)) ==  0 ≤ π_1(p) < n ^
                             0 ≤ π_2(p) < n
 
