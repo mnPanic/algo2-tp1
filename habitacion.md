@@ -94,4 +94,7 @@ verificar_alcance_pos(h, ps, p) == if ø?(ps)
                                    fi
 
 // TODO: axiomatizar posiciones @Schuster
+test test test
+posiciones = true conjunto xd
+
 ```
