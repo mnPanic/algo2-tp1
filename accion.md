@@ -8,8 +8,8 @@ generos
 acción
 ```
 
-observadores
-------------
+otras operaciones
+-----------------
 
 ```text
 ubicacionLuegoDe : accion x hab h x ubicacion u -> ubicacion    {esValida(h, pos(u))}
@@ -19,6 +19,12 @@ igualdad observacional
 ----------------------
 
 ```text
+(arriba     =obs arriba) ^
+(abajo      =obs abajo) ^
+(izquierda  =obs izquierda) ^
+(derecha    =obs derecha) ^
+(disparar   =obs disparar) ^
+(nada       =obs nada)
 ```
 
 generadores

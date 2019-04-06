@@ -1,1 +1,4 @@
 # Dudas
+
+- Acción
+  - Igualdad obs?
