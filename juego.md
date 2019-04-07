@@ -62,22 +62,27 @@ otras operaciones
 -----------------
 
 ```text
-jugadores : juego -> conj(pj)        // devuelve las claves de accionesPJs
-fantasmas : juego -> conj(fantasma)  // devuelve las claves de accionesFan
+pos : ubicacion -> posicion
+dir : ubicacion -> dirección
+
+jugadores : juego -> conj(pj)
+fantasmas : juego -> conj(fantasma)
 
 terminaRonda : juego j x pj p x accion -> bool
     {p € jugadores(j)}
 // dice si una ronda termino, i.e si murio el fantasma especial (el ultimo fantasma)
 
-terminoJuego : juego -> bool // dice si terminó un juego, i.e si murieron todos los jugadores
+termino? : juego -> bool // dice si terminó un juego, i.e si murieron todos los jugadores
+
+estanVivos : juego j x conj(pj) pjs -> bool         {pjs C jugadores(j)}
 
 fantasmaEspecial : juego -> fantasma
 
 ubicacionPJ  : juego j x pj p -> ubicacion           {p € jugadores(j)}
 ubicacionFan : juego j x fantasma f -> ubicacion     {f € fantasmas(j)}
 
-pos : ubicacion -> posicion
-dir : ubicacion -> dirección
+deducirUbicacion : juego j x ubicacion u x acciones -> ubicacion
+    {esValida?(hab(j), u)}
 
 moriraFantasma : juego j x pj p x accion x fantasma f -> bool
     {p € jugadores(j) ^ f € fantasmas(j)}
@@ -107,7 +112,7 @@ axiomatización
 
 ```text
 
-// obs
+/////////////// observadores
 
 hab(iniciar(pjs, as, u, h)) == h
 hab(proxPaso(j, p, a)) == hab(j)
@@ -163,7 +168,45 @@ accionesFan(proxPaso(j, p, a)) ==
                          nombreSiguienteFan(j),
                          obtener(p, accionesPJs(j)) ° a)
 
-// otras operaciones
+/////////////// otras operaciones
+pos(u) = π_1(u)
+dir(u) = π_2(u)
+
+
+jugadores(j) == claves(accionesPJs(j))
+fantasmas(j) == claves(accionesFan(j))
+
+termino?(j) == estanVivos(j, jugadores(j))
+
+estanVivos(j, pjs) ==
+    if ø?(pjs)
+    then true
+    else vivePJ?(dameUno(pjs)) ^ estanVivos(j, sinUno(pjs))
+
+
+// Funciona por como está definida nombreSiguienteFan
+fantasmaEspecial(j) == #(claves(accionesFan(j)))
+
+
+ubicacionPJ(j, p) ==
+    deducirUbicacion(j,
+                     obtener(p, localizarJugadores(j))
+                     obtener(p, accionesPJs(j)))
+
+ubicacionFan(j, f) ==
+    deducirUbicacion(j,
+                     ubicacionInicialFan(j, f)
+                     obtener(f, accionesFan(j)))
+
+
+deducirUbicacion(j, u, as) ==
+    if vacía?(as)
+    then u
+    else deducirUbicacion(j,
+                          ubicacionLuegoDe(prim(as), hab(j), u),
+                          fin(as))
+    fi
+
 agregarFantasma(accionesFantasmas, f, as) ==
     definir(f, generarAccionesFantasma(as), accionesFantasmas)
 
