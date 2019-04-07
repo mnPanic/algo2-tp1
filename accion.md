@@ -30,6 +30,8 @@ posicionesAfectadasPor : accion a x hab h x ubicacion u -> conj(pos) {esValida(h
 // No tiene en cuenta la posición desde la cual se dispara.
 
 ¬\* : accion -> accion
+
+invertir : secu(accion) -> secu(accion)
 ```
 
 generadores
@@ -48,6 +50,12 @@ axiomatización
 --------------
 
 ```text
+invertir(as) ==
+    if vacía?(as)
+    then <>
+    else ¬(ult(as)) * invertir(com(as))
+    fi
+
 ¬(arriba)     = abajo
 ¬(abajo)      = arriba
 ¬(izquierda)  = derecha
