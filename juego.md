@@ -51,7 +51,7 @@ generadores
 -----------
 
 ```text
-iniciar : conj(pj) pjs x fantasma x secu(acciones) as x ubicacion x hab h -> juego
+iniciar : conj(pj) pjs x secu(acciones) as x ubicacion x hab h -> juego
     {esConexa(h) ^ not ø?(as) ^ not ø?(pjs)}
 
 proxPaso : juego j x pj p x accion a -> juego
@@ -96,6 +96,10 @@ inicializarAcciones : conj(pj) -> dicc(pj, secu(accion))
 
 agregarAccion : dicc(pj, secu(accion)) acciones x conj(pj) pjs x pj p x accion
     {pjs C claves(acciones) ^ p € pjs}
+
+agregarFantasma : juego x fantasma x secu(acciones) -> dicc(fantasma, secu(accion))
+
+nombreSiguienteFan : juego -> fantasma
 ```
 
 axiomatización
@@ -105,33 +109,32 @@ axiomatización
 
 // obs
 
-hab(iniciar(pjs, f, as, u, h)) == h
+hab(iniciar(pjs, as, u, h)) == h
 hab(proxPaso(j, p, a)) == hab(j)
 
-ronda(iniciar(pjs, f, as, u, h)) == 1
+ronda(iniciar(pjs, as, u, h)) == 1
 ronda(proxPaso(j, p, a)) ==
     ronda + ß(terminaRonda(j, p, a))
 
-paso(iniciar(pjs, f, as, u, h)) == 1
+paso(iniciar(pjs, as, u, h)) == 1
 paso(proxPaso(j, p, a)) ==
     if (terminaRonda(j, p, a))
     then 1
     else paso(j) + 1
     fi
 
-vivePJ?(iniciar(pjs, f, as, u, h), p) == true
+vivePJ?(iniciar(pjs, as, u, h), p) == true
 vivePJ?(proxPaso(j, p, a), p') ==
     if (p = p')
     then not moriraPJ(j, fantasmas(j), p, a)
     else vivePJ?(j, p')
 
-viveFan?(iniciar(pjs, f, as, u, h), f) == true
+viveFan?(iniciar(pjs, as, u, h), f) == true
 viveFan?(proxPaso(j, p, a), f) ==
     not moriraFantasma(j, p, a, f)
 
 
-// f = f' por la reestricción
-ubicacionInicialFan(iniciar(pjs, f, as, u, h), f') == u
+ubicacionInicialFan(iniciar(pjs, as, u, h), f') == u
 ubicacionInicialFan(proxPaso(j, p, a), f) ==
     // Si f no pertence a los fantasmas del juego antes de efectuar el paso, entonces es nuevo, y fue la acción de p la que finalizó la ronda, así agregando un nuevo fantasma.
     if f € fantasmas(j)
@@ -139,7 +142,7 @@ ubicacionInicialFan(proxPaso(j, p, a), f) ==
     else obtener(p, localizarJugadores(j))  // es nuevo
     fi
 
-accionesPJs(iniciar(pjs, f, as, u, h)) ==
+accionesPJs(iniciar(pjs, as, u, h)) ==
     inicializarAcciones(pjs)
 
 accionesPJs(proxPaso(j, p, a)) ==
@@ -195,4 +198,6 @@ moriraPorFantasma(j, f, p, a) ==
 accionFan(j, f) == (obtener(accionesFan(j), f))[paso(j) % obtener(accionesFan(j), f)]
 
 puntaje(j) == ronda(j) - 1
+
+nombreSiguienteFan(j) == #claves(accionesFan(j)) + 1
 ```
