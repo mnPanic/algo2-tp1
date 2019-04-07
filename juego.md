@@ -143,11 +143,13 @@ accionesPJs(iniciar(pjs, f, as, u, h)) ==
     inicializarAcciones(pjs)
 
 accionesPJs(proxPaso(j, p, a)) ==
-    agregarAccion(accionesPJs(j), personajes(j), p, a)
+    if not terminaRonda(j, p, a)
+    then agregarAccion(accionesPJs(j), jugadores(j), p, a)
+    else inicializarAcciones(jugadores(j))
+    fi
 
 // otras operaciones
-
-// Setea la acción a al personaje p, y al resto le pone nada, porque se mueve 1 solo
+// Setea la acción a al pj p, y al resto le pone nada, porque se mueve 1 solo
 agregarAccion(acciones, pjs, p, a) ==
     if ø?(pjs)
     then vacio
