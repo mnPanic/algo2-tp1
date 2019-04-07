@@ -89,6 +89,8 @@ moriraPorFantasma : juego j x fantasma f x pj p x accion -> bool
     {p € jugadores(j) ^ f € fantasmas(j)}
 
 accionFan : juego j x fantasma f -> accion  {f € fantasmas(j) ^L vivoFan?(j, f)}
+
+puntaje : juego -> nat
 ```
 
 axiomatización
@@ -155,4 +157,6 @@ moriraPorFantasma(j, f, p, a) ==
 
 
 accionFan(j, f) == (obtener(accionesFan(j), f))[paso(j) % obtener(accionesFan(j), f)]
+
+puntaje(j) == ronda(j) - 1
 ```
