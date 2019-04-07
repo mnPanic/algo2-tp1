@@ -27,14 +27,14 @@ observadores
 accionesPJs : juego -> dicc(pj, secu(accion))
 accionesFan : juego -> dicc(fantasma, secu(accion))
 
-hab   : juego -> hab    // done
-ronda : juego -> nat    // done
-paso  : juego -> nat    // done
+hab   : juego -> hab
+ronda : juego -> nat
+paso  : juego -> nat
 
-vivePJ?  : juego j x pj p -> bool               {p € jugadores(j)}  // done
-viveFan? : juego j x fantasma f -> bool         {f € fantasmas(j)}  // done
+vivePJ?  : juego j x pj p -> bool               {p € jugadores(j)}
+viveFan? : juego j x fantasma f -> bool         {f € fantasmas(j)}
 
-ubicacionInicialFan : juego j x fantasma f -> ubicacion    {f € fantasmas(j)}   // done
+ubicacionInicialFan : juego j x fantasma f -> ubicacion    {f € fantasmas(j)}
 
 // Dada
 localizarJugadores : juego -> dicc(pj, ubicacion)
@@ -164,7 +164,6 @@ accionesFan(proxPaso(j, p, a)) ==
                          obtener(p, accionesPJs(j)) ° a)
 
 // otras operaciones
-
 agregarFantasma(accionesFantasmas, f, as) ==
     definir(f, generarAccionesFantasma(as), accionesFantasmas)
 
@@ -189,7 +188,7 @@ agregarAccion(acciones, pjs, p, a) ==
     fi
 
 
-inicialiarAcciones(pjs) ==
+inicializarAcciones(pjs) ==
     if ø?(pjs)
     then vacío
     else definir(dameUno(pjs), <>, inicializarAcciones(sinUno(pjs)))
