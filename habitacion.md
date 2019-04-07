@@ -65,7 +65,8 @@ esValida?(p, nueva(n)) ==  0 ≤ π_1(p) < n ^
 esValida?(p, ocupar(p', h)) == p = p' vL esValida?(p, h)
 
 estaOcupada?(p, nuevo(n)) == false
-estaOcupada?(p, ocupar(p', h)) == p = p'
+estaOcupada?(p, ocupar(p', h)) ==
+    p = p' v estaOcupada?(p, h)
 
 tamaño(nueva(n)) == n
 tamaño(ocupar(p, h)) == tamaño(h)
