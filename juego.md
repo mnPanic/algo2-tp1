@@ -52,10 +52,10 @@ generadores
 
 ```text
 iniciar : conj(pj) pjs x secu(acciones) as x ubicacion x hab h -> juego
-    {esConexa(h) ^ not ø?(as) ^ not ø?(pjs)}
+    {esConexa(h) ^ ¬ ø?(as) ^ ¬ ø?(pjs)}
 
 proxPaso : juego j x pj p x accion a -> juego
-    {p € jugadores(j) ^L vivePJ?(j, p) ^ not termino?(j)}
+    {p € jugadores(j) ^L vivePJ?(j, p) ^ ¬ termino?(j)}
 ```
 
 otras operaciones
@@ -126,12 +126,12 @@ paso(proxPaso(j, p, a)) ==
 vivePJ?(iniciar(pjs, as, u, h), p) == true
 vivePJ?(proxPaso(j, p, a), p') ==
     if (p = p')
-    then not moriraPJ(j, fantasmas(j), p, a)
+    then ¬ moriraPJ(j, fantasmas(j), p, a)
     else vivePJ?(j, p')
 
 viveFan?(iniciar(pjs, as, u, h), f) == true
 viveFan?(proxPaso(j, p, a), f) ==
-    not moriraFantasma(j, p, a, f)
+    ¬ moriraFantasma(j, p, a, f)
 
 
 ubicacionInicialFan(iniciar(pjs, as, u, h), f') == u
@@ -146,7 +146,7 @@ accionesPJs(iniciar(pjs, as, u, h)) ==
     inicializarAcciones(pjs)
 
 accionesPJs(proxPaso(j, p, a)) ==
-    if not terminaRonda(j, p, a)
+    if ¬ terminaRonda(j, p, a)
     then agregarAccion(accionesPJs(j), jugadores(j), p, a)
     else inicializarAcciones(jugadores(j))
     fi
@@ -190,7 +190,7 @@ moriraPJ(j, fs, p, a) ==
     fi
 
 moriraPorFantasma(j, f, p, a) ==
-    not moriraFantasma(j, p, a, f) ^
+    ¬ moriraFantasma(j, p, a, f) ^
     accionFan(j, f) = disparar ^
     pos(ubicacionLuegoDe(a, hab(j), ubicacionPJ(j, p))) € posicionesAfectadasPor(disparar, hab(j), ubicacionFan(j, f))
 

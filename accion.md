@@ -50,25 +50,25 @@ ubicacionLuegoDe(nada, h, u) == u
 ubicacionLuegoDe(disparar, h, u) == u
 
 ubicacionLuegoDe(arriba, h, < <x, y>, dir >) ==
-    <(if esValida?(h, < x, y + 1 >) ^L not estaOcupada?(h, < x, y + 1 >)
+    <(if esValida?(h, < x, y + 1 >) ^L ¬ estaOcupada?(h, < x, y + 1 >)
     then < x, y + 1 >
     else < x, y >
     fi), "arriba">
 
 ubicacionLuegoDe(abajo, h, < <x, y>, dir >) ==
-    <(if esValida?(h, < x, y - 1 >) ^L not estaOcupada?(h, < x, y - 1 >)
+    <(if esValida?(h, < x, y - 1 >) ^L ¬ estaOcupada?(h, < x, y - 1 >)
     then < x, y - 1 >
     else < x, y >
     fi), "abajo">
 
 ubicacionLuegoDe(derecha, h, < <x, y>, dir >) ==
-    <(if esValida?(h, < x + 1, y >) ^L not estaOcupada?(h, < x + 1, y >)
+    <(if esValida?(h, < x + 1, y >) ^L ¬ estaOcupada?(h, < x + 1, y >)
     then < x + 1, y >
     else < x, y >
     fi), "derecha">
 
 ubicacionLuegoDe(izquierda, h, < <x, y>, dir >) ==
-    <(if esValida?(h, < x - 1, y >) ^L not estaOcupada?(h, < x - 1, y >)
+    <(if esValida?(h, < x - 1, y >) ^L ¬ estaOcupada?(h, < x - 1, y >)
     then < x - 1, y >
     else < x, y >
     fi), "izquierda">
