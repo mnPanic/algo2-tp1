@@ -28,6 +28,8 @@ ubicacionLuegoDe : accion x hab h x ubicacion u -> ubicacion    {esValida(h, pos
 
 posicionesAfectadasPor : accion a x hab h x ubicacion u -> conj(pos) {esValida(h, pos(u))}
 // No tiene en cuenta la posición desde la cual se dispara.
+
+¬\* : accion -> accion
 ```
 
 generadores
@@ -46,6 +48,13 @@ axiomatización
 --------------
 
 ```text
+¬(arriba)     = abajo
+¬(abajo)      = arriba
+¬(izquierda)  = derecha
+¬(derecha)    = izquierda
+¬(disparar)   = disparar
+¬(nada)       = nada
+
 ubicacionLuegoDe(nada, h, u) == u
 ubicacionLuegoDe(disparar, h, u) == u
 
