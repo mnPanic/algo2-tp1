@@ -33,7 +33,7 @@ generadores
 
 ```text
 nueva : nat n -> hab                        {n > 1}
-ocupar : hab h x pos c -> hab               {esValida?(c, h) ^L ¬ esta_ocupada(c)}
+ocupar : hab h x pos c -> hab               {esValida?(c, h) ^L ¬ estaOcupada?(c)}
 ```
 
 otras operaciones
