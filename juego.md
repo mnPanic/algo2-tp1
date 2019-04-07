@@ -65,7 +65,7 @@ otras operaciones
 jugadores : juego -> conj(pj)        // devuelve las claves de accionesPJs
 fantasmas : juego -> conj(fantasma)  // devuelve las claves de accionesFan
 
-terminoRonda : juego j x pj p x accion -> bool
+terminaRonda : juego j x pj p x accion -> bool
     {p € jugadores(j)}
 // dice si una ronda termino, i.e si murio el fantasma especial (el ultimo fantasma)
 
@@ -110,11 +110,11 @@ hab(proxPaso(j, p, a)) == hab(j)
 
 ronda(iniciar(pjs, f, as, u, h)) == 1
 ronda(proxPaso(j, p, a)) ==
-    ronda + ß(terminoRonda(j, p, a))
+    ronda + ß(terminaRonda(j, p, a))
 
 paso(iniciar(pjs, f, as, u, h)) == 1
 paso(proxPaso(j, p, a)) ==
-    if (terminoRonda(j, p, a))
+    if (terminaRonda(j, p, a))
     then 1
     else paso(j) + 1
     fi
@@ -171,7 +171,7 @@ inicialiarAcciones(pjs) ==
     else definir(dameUno(pjs), <>, inicializarAcciones(sinUno(pjs)))
     fi
 
-terminoRonda(j, p, a) == moriraFantasma(j, p, a, fantasmaEspecial(j))
+terminaRonda(j, p, a) == moriraFantasma(j, p, a, fantasmaEspecial(j))
 
 moriraFantasma(j, p, a, f) ==
     a = disparar ^
