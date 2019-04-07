@@ -24,8 +24,8 @@ observadores
 ------------
 
 ```text
-accionesPJs : juego -> dicc(jugador, secu(accion))
-accionesFan : juego -> dicc(jugador, secu(accion))
+accionesPJs : juego -> dicc(pj, secu(accion))
+accionesFan : juego -> dicc(fantasma, secu(accion))
 
 hab   : juego -> hab    // done
 ronda : juego -> nat    // done
@@ -91,6 +91,11 @@ moriraPorFantasma : juego j x fantasma f x pj p x accion -> bool
 accionFan : juego j x fantasma f -> accion  {f € fantasmas(j) ^L vivoFan?(j, f)}
 
 puntaje : juego -> nat
+
+inicializarAcciones : conj(pj) -> dicc(pj, secu(accion))
+
+agregarAccion : dicc(pj, secu(accion)) acciones x conj(pj) pjs x pj p x accion
+    {pjs C claves(acciones) ^ p € pjs}
 ```
 
 axiomatización
@@ -134,8 +139,37 @@ ubicacionInicialFan(proxPaso(j, p, a), f) ==
     else obtener(p, localizarJugadores(j))  // es nuevo
     fi
 
+accionesPJs(iniciar(pjs, f, as, u, h)) ==
+    inicializarAcciones(pjs)
+
+accionesPJs(proxPaso(j, p, a)) ==
+    agregarAccion(accionesPJs(j), personajes(j), p, a)
 
 // otras operaciones
+
+// Setea la acción a al personaje p, y al resto le pone nada, porque se mueve 1 solo
+agregarAccion(acciones, pjs, p, a) ==
+    if ø?(pjs)
+    then vacio
+    else if dameUno(pjs) == p
+         then definir(p,
+                      obtener(p, acciones) ° a,
+                      agregarAccion(acciones, sinUno(pjs), p, a))
+
+         else if vivePJ?(dameUno(pjs)
+              then definir(dameUno(pjs),
+                           obtener(dameUno(pjs), acciones) ° nada,
+                           agregarAccion(acciones, sinUno(pjs), p, a))
+              else agregarAccion(acciones, sinUno(pjs), p, a)
+         fi
+    fi
+
+
+inicialiarAcciones(pjs) ==
+    if ø?(pjs)
+    then vacío
+    else definir(dameUno(pjs), <>, inicializarAcciones(sinUno(pjs)))
+    fi
 
 terminoRonda(j, p, a) == moriraFantasma(j, p, a, fantasmaEspecial(j))
 
