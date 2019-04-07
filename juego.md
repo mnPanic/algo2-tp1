@@ -27,14 +27,14 @@ observadores
 accionesPJs : juego -> dicc(jugador, secu(accion))
 accionesFan : juego -> dicc(jugador, secu(accion))
 
-hab   : juego -> hab
-ronda : juego -> nat
-paso  : juego -> nat
+hab   : juego -> hab    // done
+ronda : juego -> nat    // done
+paso  : juego -> nat    // done
 
-vivePJ?  : juego j x pj p -> bool             {p € jugadores(j)}
-viveFan? : juego j x fantasma f -> bool      {f € fantasmas(j)}
+vivePJ?  : juego j x pj p -> bool               {p € jugadores(j)}  // done
+viveFan? : juego j x fantasma f -> bool         {f € fantasmas(j)}  // done
 
-ubicacionInicialFan : juego j x fantasma f -> ubicacion    {f € fantasmas(j)}
+ubicacionInicialFan : juego j x fantasma f -> ubicacion    {f € fantasmas(j)}   // done
 
 // Dada
 localizarJugadores : juego -> dicc(pj, ubicacion)
