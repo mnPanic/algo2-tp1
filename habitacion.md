@@ -15,8 +15,8 @@ observadores
 ------------
 
 ```text
-es_valida? : hab x pos -> bool
-esta_ocupada? : hab h x pos c -> bool           {esValida?(c, h)}
+esValida? : hab x pos -> bool
+estaOcupada? : hab h x pos c -> bool           {esValida?(c, h)}
 ```
 
 igualdad observacional
@@ -42,14 +42,14 @@ otras operaciones
 ```text
 tamaño : hab -> nat
 
-es_conexa? : hab -> bool
+esConexa? : hab -> bool
 posiciones : hab -> conj(pos)
-posiciones_libres : hab -> conj(pos)
+posicionesLibres : hab -> conj(pos)
 
 // auxiliares
-filtrar_libres : hab x conj(pos) -> conj(pos)
-verificar_alcance : hab x conj(pos) x conj(pos) -> bool
-verificar_alcance_pos : hab x pos x conj(pos) -> bool
+filtrarLibres : hab x conj(pos) -> conj(pos)
+verificarAlcance : hab x conj(pos) x conj(pos) -> bool
+verificarAlcancePos : hab x pos x conj(pos) -> bool
 
 // Funcion dada
 es_alcanzable : hab x pos x pos -> bool
@@ -59,38 +59,38 @@ axiomatización
 --------------
 
 ```text
-es_valida?(p, nueva(n)) ==  0 ≤ π_1(p) < n ^
+esValida?(p, nueva(n)) ==  0 ≤ π_1(p) < n ^
                             0 ≤ π_2(p) < n
 
-es_valida?(p, ocupar(p', h)) == p = p' vL es_valida?(p, h)
+esValida?(p, ocupar(p', h)) == p = p' vL esValida?(p, h)
 
-esta_ocupada?(p, nuevo(n)) == false
-esta_ocupada?(p, ocupar(p', h)) == p = p'
+estaOcupada?(p, nuevo(n)) == false
+estaOcupada?(p, ocupar(p', h)) == p = p'
 
 tamaño(nueva(n)) == n
 tamaño(ocupar(p, h)) == tamaño(h)
 
-posiciones_libres(h) == filtrar_libres(posiciones(h))
-filtrar_libres(ps) == if ø?(ps)
+posicionesLibres(h) == filtrarLibres(posiciones(h))
+filtrarLibres(ps) == if ø?(ps)
                       then ø
-                      else (if esta_ocupada?(dameUno(ps))
+                      else (if estaOcupada?(dameUno(ps))
                             then ø
                             else {dameUno(ps)}
-                            fi) U filtrar_libres(sinUno(ps))
+                            fi) U filtrarLibres(sinUno(ps))
                       fi
 
-es_conexa(h) == verificar_alcance(h, posiciones_libres(h))
+es_conexa(h) == verificarAlcance(h, posicionesLibres(h))
 
-verificar_alcance(h, ps) == if ø?(ps)
+verificarAlcance(h, ps) == if ø?(ps)
                             then true
-                            else (verificar_alcance_pos(h, ps, dameUno(ps)) ^
-                                  verificar_alcance(h, sinUno(ps)))
+                            else (verificarAlcancePos(h, ps, dameUno(ps)) ^
+                                  verificarAlcance(h, sinUno(ps)))
                             fi
 
-verificar_alcance_pos(h, ps, p) == if ø?(ps)
+verificarAlcancePos(h, ps, p) == if ø?(ps)
                                    then true
                                    else (es_alcanzable(h, p, dameUno(ps)) ^
-                                         verificar_alcance_pos(h, p, sinUno(ps)))
+                                         verificarAlcancePos(h, p, sinUno(ps)))
                                    fi
 
 // TODO: axiomatizar posiciones @Schuster
