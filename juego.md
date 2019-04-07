@@ -82,7 +82,7 @@ dir : ubicacion -> dirección
 moriraFantasma : juego j x pj p x accion x fantasma f -> bool
     {p € jugadores(j) ^ f € fantasmas(j)}
 
-moriraPJ : juego j x conj(fantasma) fs x personaje p x accion -> bool
+moriraPJ : juego j x conj(fantasma) fs x pj p x accion -> bool
     {p € jugadores(j) ^ fs C fantasmas(j)}
 
 moriraPorFantasma : juego j x fantasma f x pj p x accion -> bool
