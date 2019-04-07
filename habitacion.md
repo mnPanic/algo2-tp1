@@ -52,7 +52,7 @@ verificarAlcance : hab x conj(pos) x conj(pos) -> bool
 verificarAlcancePos : hab x pos x conj(pos) -> bool
 
 // Funcion dada
-es_alcanzable : hab x pos x pos -> bool
+esAlcanzable : hab x pos x pos -> bool
 ```
 
 axiomatización
@@ -79,7 +79,7 @@ filtrarLibres(ps) == if ø?(ps)
                             fi) U filtrarLibres(sinUno(ps))
                       fi
 
-es_conexa(h) == verificarAlcance(h, posicionesLibres(h))
+esConexa?(h) == verificarAlcance(h, posicionesLibres(h))
 
 verificarAlcance(h, ps) == if ø?(ps)
                             then true
@@ -89,7 +89,7 @@ verificarAlcance(h, ps) == if ø?(ps)
 
 verificarAlcancePos(h, ps, p) == if ø?(ps)
                                    then true
-                                   else (es_alcanzable(h, p, dameUno(ps)) ^
+                                   else (esAlcanzable(h, p, dameUno(ps)) ^
                                          verificarAlcancePos(h, p, sinUno(ps)))
                                    fi
 
