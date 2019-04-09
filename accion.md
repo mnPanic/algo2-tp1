@@ -12,12 +12,9 @@ igualdad observacional
 ----------------------
 
 ```text
-(arriba     =obs arriba) ^
-(abajo      =obs abajo) ^
-(izquierda  =obs izquierda) ^
-(derecha    =obs derecha) ^
-(disparar   =obs disparar) ^
-(nada       =obs nada)
+(mover(d)      =obs mover(d)) ^
+(disparar      =obs disparar) ^
+(nada          =obs nada)
 ```
 
 otras operaciones
@@ -38,10 +35,7 @@ generadores
 -----------
 
 ```text
-arriba     : -> accion
-abajo      : -> accion
-izquierda  : -> accion
-derecha    : -> accion
+mover      : direccion -> accion
 disparar   : -> accion
 nada       : -> accion
 ```
@@ -56,39 +50,36 @@ invertir(as) ==
     else ¬(ult(as)) * invertir(com(as))
     fi
 
-¬(arriba)     = abajo
-¬(abajo)      = arriba
-¬(izquierda)  = derecha
-¬(derecha)    = izquierda
-¬(disparar)   = disparar
-¬(nada)       = nada
+¬(mover(d))     = mover(opuesta(d))
+¬(disparar)     = disparar
+¬(nada)         = nada
 
 ubicacionLuegoDe(nada, h, u) == u
 ubicacionLuegoDe(disparar, h, u) == u
 
-ubicacionLuegoDe(arriba, h, < <x, y>, dir >) ==
+ubicacionLuegoDe(mover(arriba), h, < <x, y>, dir >) ==
     <(if esValida?(h, < x, y + 1 >) ^L ¬ estaOcupada?(h, < x, y + 1 >)
     then < x, y + 1 >
     else < x, y >
-    fi), "arriba">
+    fi), arriba>
 
-ubicacionLuegoDe(abajo, h, < <x, y>, dir >) ==
+ubicacionLuegoDe(mover(abajo), h, < <x, y>, dir >) ==
     <(if esValida?(h, < x, y - 1 >) ^L ¬ estaOcupada?(h, < x, y - 1 >)
     then < x, y - 1 >
     else < x, y >
-    fi), "abajo">
+    fi), abajo>
 
-ubicacionLuegoDe(derecha, h, < <x, y>, dir >) ==
+ubicacionLuegoDe(mover(derecha), h, < <x, y>, dir >) ==
     <(if esValida?(h, < x + 1, y >) ^L ¬ estaOcupada?(h, < x + 1, y >)
     then < x + 1, y >
     else < x, y >
-    fi), "derecha">
+    fi), derecha>
 
-ubicacionLuegoDe(izquierda, h, < <x, y>, dir >) ==
+ubicacionLuegoDe(mover(izquierda), h, < <x, y>, dir >) ==
     <(if esValida?(h, < x - 1, y >) ^L ¬ estaOcupada?(h, < x - 1, y >)
     then < x - 1, y >
     else < x, y >
-    fi), "izquierda">
+    fi), izquierda>
 
 
 // TODO: Axiomatizar posicionesAfectadas @Gasti
