@@ -36,6 +36,7 @@ generadores
 
 ```text
 mover      : direccion -> accion
+mirar      : direccion -> accion
 disparar   : -> accion
 nada       : -> accion
 ```
@@ -51,11 +52,13 @@ invertir(as) ==
     fi
 
 ¬(mover(d))     = mover(opuesta(d))
+¬(mirar(d))     = mirar(opuesta(d))
 ¬(disparar)     = disparar
 ¬(nada)         = nada
 
 ubicacionLuegoDe(nada, h, u) == u
 ubicacionLuegoDe(disparar, h, u) == u
+ubicacionLuegoDe(mirar(d), h, u) == <pos(u), d>
 
 ubicacionLuegoDe(mover(arriba), h, < <x, y>, dir >) ==
     <(if esValida?(h, < x, y + 1 >) ^L ¬ estaOcupada?(h, < x, y + 1 >)
