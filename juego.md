@@ -4,9 +4,6 @@ TAD PJ ES NAT
 TAD Fantasma ES NAT
 ===================
 
-TAD Dirección ES String
-=======================
-
 TAD Ubicación ES tupla(posicion, direccion)
 ===========================================
 
