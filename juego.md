@@ -90,7 +90,7 @@ moriraFantasma : juego j x pj p x accion x fantasma f -> bool
 moriraPJ : juego j x conj(fantasma) fs x pj p x accion -> bool
     {p € jugadores(j) ^ fs C fantasmas(j)}
 
-moriraPorFantasma : juego j x fantasma f x pj p x accion -> bool
+moriraPJPorFantasma : juego j x fantasma f x pj p x accion -> bool
     {p € jugadores(j) ^ f € fantasmas(j)}
 
 accionFan : juego j x fantasma f -> accion  {f € fantasmas(j) ^L vivoFan?(j, f)}
@@ -245,7 +245,7 @@ moriraFantasma(j, p, a, f) ==
 moriraPJ(j, fs, p, a) ==
     if ø?(fs)
     then false
-    else (moriraPorFantasma(j, dameUno(fs), p, a) v
+    else (moriraPJPorFantasma(j, dameUno(fs), p, a) v
           moriraPj(j, sinUno(fs), p, a))
     fi
 
