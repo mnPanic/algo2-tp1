@@ -49,16 +49,26 @@ axiomatización
 --------------
 
 ```text
-invertir(h, as) ==
+invertir(h, u, as) ==
     if vacía?(as)
     then <>
-    else ¬(ult(as)) * invertir(com(as))
+    else ¬(ult(as), h, u) * invertir(h,
+                                     com(as),
+                                     ubicacionLuegoDe(ult(as), h, u))
     fi
 
-¬(mover(d))     = mover(opuesta(d))
-¬(mirar(d))     = mirar(opuesta(d))
-¬(disparar)     = disparar
-¬(nada)         = nada
+¬(mover(d), h, u) ==
+    // Si el jugador al moverse en esa dirección se hubiese quedado en el lugar
+    // (i.e chocado contra la pared)
+    // Entonces el fantasma no debería moverse para el otro lado, sino que debería simplemente mirar en la dirección opuesta.
+    if ubicacionLuegoDe(mover(d), h, u) = u     // No se movió
+    then mirar(opuesta(d))
+    // Si se hubiese movido, entonces deberá moverse en la dirección opuesta
+    else mover(opuesta(d))
+
+¬(mirar(d), h, u) == mirar(opuesta(d))
+¬(disparar, h, u) == disparar
+¬(nada, h, u) == nada
 
 ubicacionLuegoDe(nada, h, u) == u
 ubicacionLuegoDe(disparar, h, u) == u
@@ -89,7 +99,7 @@ ubicacionLuegoDe(mover(izquierda), h, < <x, y>, dir >) ==
     fi), izquierda>
 
 esMirar(mirar(d))   == true
-esMirar(moverse(d)) == true
+esMirar(moverse(d)) == false
 esMirar(disparar)   == false
 esMirar(nada)       == false
 
