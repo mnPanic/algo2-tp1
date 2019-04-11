@@ -75,6 +75,7 @@ estanVivos : juego j x conj(pj) pjs -> bool         {pjs C jugadores(j)}
 
 fantasmaEspecial : juego -> fantasma
 
+ubicacionInicialPJ : juego j x pj p -> ubicacion     {p € jugadores(j)}
 ubicacionPJ  : juego j x pj p -> ubicacion           {p € jugadores(j)}
 ubicacionFan : juego j x fantasma f -> ubicacion     {f € fantasmas(j)}
 
@@ -136,13 +137,12 @@ viveFan?(iniciar(pjs, as, u, h), f) == true
 viveFan?(proxPaso(j, p, a), f) ==
     ¬ moriraFantasma(j, p, a, f)
 
-
 ubicacionInicialFan(iniciar(pjs, as, u, h), f') == u
 ubicacionInicialFan(proxPaso(j, p, a), f) ==
     // Si f no pertence a los fantasmas del juego antes de efectuar el paso, entonces es nuevo, y fue la acción de p la que finalizó la ronda, así agregando un nuevo fantasma.
     if f € fantasmas(j)
     then ubicacionInicialFan(j, f)
-    else obtener(p, localizarJugadores(j))  // es nuevo
+    else ubicacionInicialPJ(j, p)  // es nuevo
     fi
 
 accionesPJs(iniciar(pjs, as, u, h)) ==
@@ -187,9 +187,11 @@ estanVivos(j, pjs) ==
 fantasmaEspecial(j) == #(claves(accionesFan(j)))
 
 
+ubicacionInicialPJ(j, p) == obtener(p, localizarJugadores(j))
+
 ubicacionPJ(j, p) ==
     deducirUbicacion(j,
-                     obtener(p, localizarJugadores(j))
+                     ubicacionInicialPJ(j, p)
                      obtener(p, accionesPJs(j)))
 
 ubicacionFan(j, f) ==
