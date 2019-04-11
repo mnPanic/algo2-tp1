@@ -240,8 +240,7 @@ inicializarAcciones(pjs) ==
 terminaRonda(j, p, a) == moriraFantasma(j, p, a, fantasmaEspecial(j))
 
 moriraFantasma(j, p, a, f) ==
-    a = disparar ^
-    pos(ubicacionFan(j, f)) € posicionesAfectadasPor(disparar, hab(j), ubicacionPJ(j, p))
+    pos(ubicacionFan(j, f)) € posicionesAfectadasPor(a, hab(j), ubicacionPJ(j, p))
 
 moriraPJ(j, fs, p, a) ==
     if ø?(fs)
@@ -250,10 +249,9 @@ moriraPJ(j, fs, p, a) ==
           moriraPj(j, sinUno(fs), p, a))
     fi
 
-moriraPorFantasma(j, f, p, a) ==
+moriraPJPorFantasma(j, f, p, a) ==
     ¬ moriraFantasma(j, p, a, f) ^
-    accionFan(j, f) = disparar ^
-    pos(ubicacionLuegoDe(a, hab(j), ubicacionPJ(j, p))) € posicionesAfectadasPor(disparar, hab(j), ubicacionFan(j, f))
+    pos(ubicacionLuegoDe(a, hab(j), ubicacionPJ(j, p))) € posicionesAfectadasPor(accionFan(j, f), hab(j), ubicacionFan(j, f))
 
 
 accionFan(j, f) == (obtener(accionesFan(j), f))[paso(j) % obtener(accionesFan(j), f)]
