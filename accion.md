@@ -29,7 +29,7 @@ posicionesAfectadasPor : accion a x hab h x ubicacion u -> conj(pos) {esValida(h
 
 ¬\* : accion -> accion
 
-invertir : secu(accion) -> secu(accion)
+invertir : hab x secu(accion) -> secu(accion)
 
 esMirar : accion -> bool
 
@@ -49,7 +49,7 @@ axiomatización
 --------------
 
 ```text
-invertir(as) ==
+invertir(h, as) ==
     if vacía?(as)
     then <>
     else ¬(ult(as)) * invertir(com(as))
