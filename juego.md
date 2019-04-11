@@ -80,7 +80,7 @@ ubicacionPJ  : juego j x pj p -> ubicacion           {p € jugadores(j)}
 ubicacionFan : juego j x fantasma f -> ubicacion     {f € fantasmas(j)}
 
 deducirUbicacion : juego j x ubicacion u x acciones -> ubicacion
-    {esValida?(hab(j), u)}
+    {esValida?(hab(j), pos(u))}
 
 moriraFantasma : juego j x pj p x accion x fantasma f -> bool
     {p € jugadores(j) ^ f € fantasmas(j)}
@@ -101,7 +101,7 @@ agregarAccion : dicc(pj, secu(accion)) acciones x conj(pj) pjs x pj p x accion
     {pjs C claves(acciones) ^ p € pjs}
 
 agregarFantasma : hab h x ubicacion u x dicc(fantasma, secu(accion)) x fantasma x secu(accion) -> dicc(fantasma, secu(accion))
-    {esValida?(h, u)}
+    {esValida?(h, pos(u))}
 
 generarAccionesFantasma : hab x secu(accion) -> secu(accion)
 

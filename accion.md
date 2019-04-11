@@ -22,14 +22,14 @@ otras operaciones
 -----------------
 
 ```text
-ubicacionLuegoDe : accion x hab h x ubicacion u -> ubicacion    {esValida(h, pos(u))}
+ubicacionLuegoDe : accion x hab h x ubicacion u -> ubicacion    {esValida?(h, pos(u))}
 
-posicionesAfectadasPor : accion a x hab h x ubicacion u -> conj(pos) {esValida(h, pos(u))}
+posicionesAfectadasPor : accion a x hab h x ubicacion u -> conj(pos) {esValida?(h, pos(u))}
 // No tiene en cuenta la posición desde la cual se dispara.
 
 ¬\* : accion -> accion
 
-invertir : hab x secu(accion) -> secu(accion)
+invertir : hab h x ubicacion u x secu(accion) -> secu(accion)       {esValida?(h, pos(u))}
 
 esMirar : accion -> bool
 
