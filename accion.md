@@ -13,6 +13,7 @@ igualdad observacional
 
 ```text
 (mover(d)      =obs mover(d)) ^
+(mirar(d)      =obs mirar(d)) ^
 (disparar      =obs disparar) ^
 (nada          =obs nada)
 ```
@@ -29,6 +30,9 @@ posicionesAfectadasPor : accion a x hab h x ubicacion u -> conj(pos) {esValida(h
 ¬\* : accion -> accion
 
 invertir : secu(accion) -> secu(accion)
+
+esMirar : accion -> bool
+
 ```
 
 generadores
@@ -83,6 +87,11 @@ ubicacionLuegoDe(mover(izquierda), h, < <x, y>, dir >) ==
     then < x - 1, y >
     else < x, y >
     fi), izquierda>
+
+esMirar(mirar(d))   == true
+esMirar(moverse(d)) == true
+esMirar(disparar)   == false
+esMirar(nada)       == false
 
 
 // TODO: Axiomatizar posicionesAfectadas @Gasti

@@ -52,7 +52,7 @@ iniciar : conj(pj) pjs x secu(acciones) as x ubicacion x hab h -> juego
     {esConexa(h) ^ ¬ ø?(as) ^ ¬ ø?(pjs)}
 
 proxPaso : juego j x pj p x accion a -> juego
-    {p € jugadores(j) ^L vivePJ?(j, p) ^ ¬ termino?(j)}
+    {p € jugadores(j) ^L vivePJ?(j, p) ^ ¬ termino?(j) ^ ¬ esMirar(a)}
 ```
 
 otras operaciones
