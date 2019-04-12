@@ -97,7 +97,7 @@ verificarAlcancePos(h, ps, p) == if ø?(ps)
 
 posiciones(h) == darPosiciones(h, tamaño(h)-1, tamaño(h)-1, tamaño(h)-1)
 
-darPosiciones(h, n, m, tam) == if n = 0 ^ k = 0
+darPosiciones(h, n, k, tam) == if n = 0 ^ k = 0
                                then ø
                                else if k = 0
                                then Ag((n,k), darPosiciones(h, n-1, tam, tam))
