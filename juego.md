@@ -169,7 +169,7 @@ paso(j) = cantPasos(j, jugadores(j))
 
 cantPasos(j, pjs) == if ø?(pjs)
                      then 0
-                     else long(obtener(dameUno), accionesPJs(j)) + cantPasos(j, sinUno(pjs))
+                     else long(obtener(dameUno(pjs)), accionesPJs(j)) + cantPasos(j, sinUno(pjs))
                      fi
 
 
