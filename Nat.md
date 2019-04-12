@@ -2,7 +2,7 @@
 
 \*%* : nat x nat -> nat
 
-n%m == if 0<=n<m
+n%m == if n < m
        then n
        else if n>=m
        then (n-m)%m
