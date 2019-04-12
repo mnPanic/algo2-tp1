@@ -130,11 +130,13 @@ paso(proxPaso(j, p, a)) ==
 
 vivePJ?(iniciar(pjs, as, u, h), p) == true
 vivePJ?(proxPaso(j, p, a), p') ==
-    vivePJ?(j, p') ^        // No tiene que haber muerto en pasos anteriores
-    (if (p = p')
+    if (p = p')
     then ¬ moriraPJ(j, fantasmas(j), p, a)
-    else ¬ moriraPJ(j, fantasmas(j), p, nada)
-    fi)
+    else vivePJ?(j, p') ^
+         ¬ moriraPJ(j, fantasmas(j), p, nada)
+    fi
+    // Nota: Si p = p', entonces por la reestricción de proxPaso 
+    //       sabemos que está vivo en rondas anteriores, no hace falta preguntarlo
 
 viveFan?(iniciar(pjs, as, u, h), f) == true
 viveFan?(proxPaso(j, p, a), f) ==
