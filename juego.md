@@ -130,12 +130,15 @@ paso(proxPaso(j, p, a)) ==
 
 vivePJ?(iniciar(pjs, as, u, h), p) == true
 vivePJ?(proxPaso(j, p, a), p') ==
-    if (p = p')
+    vivePJ?(j, p') ^        // No tiene que haber muerto en pasos anteriores
+    (if (p = p')
     then ¬ moriraPJ(j, fantasmas(j), p, a)
-    else vivePJ?(j, p')
+    else ¬ moriraPJ(j, fantasmas(j), p, nada)
+    fi)
 
 viveFan?(iniciar(pjs, as, u, h), f) == true
 viveFan?(proxPaso(j, p, a), f) ==
+    viveFan?(j, f) ^       // No tiene que haber muerto en pasos anteriores
     ¬ moriraFantasma(j, p, a, f)
 
 
