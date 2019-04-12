@@ -4,7 +4,5 @@
 
 n%m == if n < m
        then n
-       else if n>=m
-       then (n-m)%m
-       else n+m
+       else (n-m)%m
        fi
