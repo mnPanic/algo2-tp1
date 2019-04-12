@@ -146,7 +146,7 @@ accionesPJs(iniciar(pjs, as, u, h)) ==
 
 accionesPJs(proxPaso(j, p, a)) ==
     if ¬ terminaRonda(j, p, a)
-    then definir(p, obtener(p, acciones) ° a, accionesPJs(j))
+    then definir(p, obtener(p, accionesPJs(j)) ° a, accionesPJs(j))
     else inicializarAcciones(jugadores(j))
     fi
 
