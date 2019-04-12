@@ -164,7 +164,7 @@ accionesFan(proxPaso(j, p, a)) ==
                          obtener(p, accionesPJs(j)) ° a)
 
 /////////////// otras operaciones
-ronda(j) = claves(accionesFan(j))
+ronda(j) = #(fantasmas(j))
 paso(j) = cantPasos(j, jugadores(j))
 
 cantPasos(j, pjs) == if ø?(pjs)
