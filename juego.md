@@ -90,7 +90,7 @@ moriraFantasma : juego j x pj p x accion x fantasma f -> bool
 moriraPJ : juego j x conj(fantasma) fs x pj p x accion -> bool
     {p € jugadores(j) ^ fs C fantasmas(j)}
 
-moriraPorFantasma : juego j x fantasma f x pj p x accion -> bool
+moriraPJPorFantasma : juego j x fantasma f x pj p x accion -> bool
     {p € jugadores(j) ^ f € fantasmas(j)}
 
 accionFan : juego j x fantasma f -> accion  {f € fantasmas(j) ^L vivoFan?(j, f)}
@@ -240,20 +240,18 @@ inicializarAcciones(pjs) ==
 terminaRonda(j, p, a) == moriraFantasma(j, p, a, fantasmaEspecial(j))
 
 moriraFantasma(j, p, a, f) ==
-    a = disparar ^
-    pos(ubicacionFan(j, f)) € posicionesAfectadasPor(disparar, hab(j), ubicacionPJ(j, p))
+    pos(ubicacionFan(j, f)) € posicionesAfectadasPor(a, hab(j), ubicacionPJ(j, p))
 
 moriraPJ(j, fs, p, a) ==
     if ø?(fs)
     then false
-    else (moriraPorFantasma(j, dameUno(fs), p, a) v
+    else (moriraPJPorFantasma(j, dameUno(fs), p, a) v
           moriraPj(j, sinUno(fs), p, a))
     fi
 
-moriraPorFantasma(j, f, p, a) ==
+moriraPJPorFantasma(j, f, p, a) ==
     ¬ moriraFantasma(j, p, a, f) ^
-    accionFan(j, f) = disparar ^
-    pos(ubicacionLuegoDe(a, hab(j), ubicacionPJ(j, p))) € posicionesAfectadasPor(disparar, hab(j), ubicacionFan(j, f))
+    pos(ubicacionLuegoDe(a, hab(j), ubicacionPJ(j, p))) € posicionesAfectadasPor(accionFan(j, f), hab(j), ubicacionFan(j, f))
 
 
 accionFan(j, f) == (obtener(accionesFan(j), f))[paso(j) % obtener(accionesFan(j), f)]
