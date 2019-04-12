@@ -101,9 +101,6 @@ puntaje : juego -> nat
 
 inicializarAcciones : conj(pj) -> dicc(pj, secu(accion))
 
-agregarAccion : dicc(pj, secu(accion)) acciones x conj(pj) pjs x pj p x accion
-    {pjs C claves(acciones) ^ p € pjs}
-
 agregarFantasma : dicc(fantasma, secu(accion)) x fantasma x secu(accion) -> dicc(fantasma, secu(accion))
 
 nombreSiguienteFan : juego -> fantasma
