@@ -87,9 +87,9 @@ ubicacionLuegoDe(disparar, h, u) == u
 ubicacionLuegoDe(mirar(d), h, u) == <pos(u), d>
 
 ubicacionLuegoDe(mover(d), h, u) ==
-    <(if esValida?(h, proximaPosEnDireccion(d, pos(u))) ^L
-         ¬ estaOcupada?(h, proximaPosEnDireccion(d, pos(u)))
-      then proximaPosEnDireccion(d, pos(u))
+    <(if esValida?(h, proxPosEnDir(d, pos(u))) ^L
+         ¬ estaOcupada?(h, proxPosEnDir(d, pos(u)))
+      then proxPosEnDir(d, pos(u))
       else pos(u)
       fi), d>
 

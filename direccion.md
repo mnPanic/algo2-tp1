@@ -43,7 +43,7 @@ otras operaciones
 
 ```text
 opuesta : direccion -> direccion
-proximaPosEnDireccion : direccion x posicion -> posicion
+proxPosEnDir : direccion x posicion -> posicion
 ```
 
 axiomatización
@@ -55,19 +55,19 @@ opuesta(abajo)      = arriba
 opuesta(izquierda)  = derecha
 opuesta(derecha)    = izquierda
 
-proximaPosEnDireccion(arriba, p) ==
+proxPosEnDir(arriba, p) ==
     <π_1(p)
      π_2(p) + 1>
 
-proximaPosEnDireccion(abajo, p) ==
+proxPosEnDir(abajo, p) ==
     <π_1(p)
      π_2(p) - 1>
 
-proximaPosEnDireccion(izquierda, p) ==
+proxPosEnDir(izquierda, p) ==
     <π_1(p) - 1
      π_2(p)>
 
-proximaPosEnDireccion(derecha, p) ==
+proxPosEnDir(derecha, p) ==
     <π_1(p) + 1
      π_2(p)>
 
