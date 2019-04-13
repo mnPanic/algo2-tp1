@@ -12,11 +12,25 @@ igualdad observacional
 ----------------------
 
 ```text
-(mover(d)      =obs mover(d)) ^
-(mirar(d)      =obs mirar(d)) ^
-(disparar      =obs disparar) ^
-(nada          =obs nada)
+(V a, a' : accion) a =obs a' <=>
+    esNada(a) = esNada(a') y
+    esDisparar(a) = esDisparar(a') y
+    esMover(a) = esMover(a') y
+    esMirar(a) = esMirar(a') y
+
+    esMover(a) o esMirar(a) implica_luego
+    direccion(a) =obs direccion(a')
 ```
+
+observadores
+------------
+
+esMover    : accion -> bool
+esMirar    : accion -> bool
+esDisparar : accion -> bool
+esNada     : accion -> bool
+
+direccion : accion a -> direccion     {esMirar(a) v esMover(a)}
 
 otras operaciones
 -----------------
@@ -52,18 +66,16 @@ axiomatización
 invertir(h, u, as) ==
     if vacía?(as)
     then <>
-    else ¬(ult(as), h, u) * invertir(h,
-                                     com(as),
-                                     ubicacionLuegoDe(ult(as), h, u))
+    else invertir(h, ubicacionLuegoDe(prim(as), h, u), fin(as)) o ¬(prim(as), h, u)
     fi
 
 ¬(mover(d), h, u) ==
     // Si el jugador al moverse en esa dirección se hubiese quedado en el lugar
     // (i.e chocado contra la pared)
-    // Entonces el fantasma no debería moverse para el otro lado, sino que debería simplemente mirar en la dirección opuesta.
-    if ubicacionLuegoDe(mover(d), h, u) = u     // No se movió
+    // Entonces el fantasma no debería mover para el otro lado, sino que debería simplemente mirar en la dirección opuesta.
+    if pos(ubicacionLuegoDe(mover(d), h, u)) = pos(u)     // No se movió
     then mirar(opuesta(d))
-    // Si se hubiese movido, entonces deberá moverse en la dirección opuesta
+    // Si se hubiese movido, entonces deberá mover en la dirección opuesta
     else mover(opuesta(d))
 
 ¬(mirar(d), h, u) == mirar(opuesta(d))
@@ -74,35 +86,36 @@ ubicacionLuegoDe(nada, h, u) == u
 ubicacionLuegoDe(disparar, h, u) == u
 ubicacionLuegoDe(mirar(d), h, u) == <pos(u), d>
 
-ubicacionLuegoDe(mover(arriba), h, < <x, y>, dir >) ==
-    <(if esValida?(h, < x, y + 1 >) ^L ¬ estaOcupada?(h, < x, y + 1 >)
-    then < x, y + 1 >
-    else < x, y >
-    fi), arriba>
+ubicacionLuegoDe(mover(d), h, u) ==
+    <(if esValida?(h, proximaPosEnDireccion(d, pos(u))) ^L
+         ¬ estaOcupada?(h, proximaPosEnDireccion(d, pos(u)))
+      then proximaPosEnDireccion(d, pos(u))
+      else pos(u)
+      fi), d>
 
-ubicacionLuegoDe(mover(abajo), h, < <x, y>, dir >) ==
-    <(if esValida?(h, < x, y - 1 >) ^L ¬ estaOcupada?(h, < x, y - 1 >)
-    then < x, y - 1 >
-    else < x, y >
-    fi), abajo>
-
-ubicacionLuegoDe(mover(derecha), h, < <x, y>, dir >) ==
-    <(if esValida?(h, < x + 1, y >) ^L ¬ estaOcupada?(h, < x + 1, y >)
-    then < x + 1, y >
-    else < x, y >
-    fi), derecha>
-
-ubicacionLuegoDe(mover(izquierda), h, < <x, y>, dir >) ==
-    <(if esValida?(h, < x - 1, y >) ^L ¬ estaOcupada?(h, < x - 1, y >)
-    then < x - 1, y >
-    else < x, y >
-    fi), izquierda>
-
+// Diviertanse
 esMirar(mirar(d))   == true
-esMirar(moverse(d)) == false
+esMirar(mover(d)) == false
 esMirar(disparar)   == false
 esMirar(nada)       == false
 
+esMover(mirar(d)) = false
+esMover(mover(d)) = true
+esMover(disparar) = false
+esMover(nada) = false
+
+esDisparar(mirar(d)) = false
+esDisparar(mover(d)) = false
+esDisparar(disparar) = true
+esDisparar(nada) = false
+
+esNada(mirar(d)) = false
+esNada(mover(d)) = false
+esNada(disparar) = false
+esNada(nada) = true
+
+direccion(mirar(d)) = d
+direccion(mover(d)) = d
 
 // TODO: Axiomatizar posicionesAfectadas @Gasti
 ```
