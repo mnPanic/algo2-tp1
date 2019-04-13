@@ -125,6 +125,4 @@ esNada(nada) = true
 
 direccion(mirar(d)) = d
 direccion(mover(d)) = d
-
-// TODO: Axiomatizar posicionesAfectadas @Gasti
 ```
