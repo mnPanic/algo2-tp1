@@ -43,13 +43,14 @@ otras operaciones
 tamaño : hab -> nat
 
 esConexa? : hab -> bool
-posiciones : hab -> conj(pos)
 posicionesLibres : hab -> conj(pos)
 
 // auxiliares
 filtrarLibres : hab x conj(pos) -> conj(pos)
 verificarAlcance : hab x conj(pos) x conj(pos) -> bool
 verificarAlcancePos : hab x pos x conj(pos) -> bool
+darPosiciones : hab x nat x nat x nat - > conj(pos)
+posiciones : hab -> conj(pos)
 
 // Funcion dada
 esAlcanzable : hab x pos x pos -> bool
@@ -93,6 +94,14 @@ verificarAlcancePos(h, ps, p) == if ø?(ps)
                                    else (esAlcanzable(h, p, dameUno(ps)) ^
                                          verificarAlcancePos(h, p, sinUno(ps)))
                                    fi
+
+posiciones(h) == darPosiciones(h, tamaño(h)-1, tamaño(h)-1, tamaño(h)-1)
+
+darPosiciones(h, n, k, tam) == if n = 0 ^ k = 0
+                               then ø
+                               else if k = 0
+                               then Ag((n,k), darPosiciones(h, n-1, tam, tam))
+                               else Ag((n,k), darPosiciones(h, n, k-1, tam))
 
 // TODO: axiomatizar posiciones @Schuster
 ```

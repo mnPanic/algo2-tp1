@@ -25,8 +25,6 @@ accionesPJs : juego -> dicc(pj, secu(accion))
 accionesFan : juego -> dicc(fantasma, secu(accion))
 
 hab   : juego -> hab
-ronda : juego -> nat
-paso  : juego -> nat
 
 vivePJ?  : juego j x pj p -> bool               {p € jugadores(j)}
 viveFan? : juego j x fantasma f -> bool         {f € fantasmas(j)}
@@ -59,6 +57,10 @@ otras operaciones
 -----------------
 
 ```text
+ronda : juego -> nat
+paso  : juego -> nat
+cantPasos : juego x conj(pj) -> nat
+
 pos : ubicacion -> posicion
 dir : ubicacion -> dirección
 
@@ -88,7 +90,7 @@ moriraFantasma : juego j x pj p x accion x fantasma f -> bool
 moriraPJ : juego j x conj(fantasma) fs x pj p x accion -> bool
     {p € jugadores(j) ^ fs C fantasmas(j)}
 
-moriraPorFantasma : juego j x fantasma f x pj p x accion -> bool
+moriraPJPorFantasma : juego j x fantasma f x pj p x accion -> bool
     {p € jugadores(j) ^ f € fantasmas(j)}
 
 accionFan : juego j x fantasma f -> accion  {f € fantasmas(j) ^L vivoFan?(j, f)}
@@ -97,13 +99,11 @@ puntaje : juego -> nat
 
 inicializarAcciones : conj(pj) -> dicc(pj, secu(accion))
 
-agregarAccion : dicc(pj, secu(accion)) acciones x conj(pj) pjs x pj p x accion
-    {pjs C claves(acciones) ^ p € pjs}
-
 agregarFantasma : hab h x ubicacion u x dicc(fantasma, secu(accion)) x fantasma x secu(accion) -> dicc(fantasma, secu(accion))
     {esValida?(h, pos(u))}
 
-generarAccionesFantasma : hab x secu(accion) -> secu(accion)
+generarAccionesFantasma : hab h x ubicacion u x secu(accion) -> secu(accion) {esValida?(h, u)}
+
 
 nombreSiguienteFan : juego -> fantasma
 ```
@@ -114,32 +114,28 @@ axiomatización
 ```text
 
 /////////////// observadores
-
 hab(iniciar(pjs, as, u, h)) == h
 hab(proxPaso(j, p, a)) == hab(j)
 
-ronda(iniciar(pjs, as, u, h)) == 1
-ronda(proxPaso(j, p, a)) ==
-    ronda + ß(terminaRonda(j, p, a))
-
-paso(iniciar(pjs, as, u, h)) == 1
-paso(proxPaso(j, p, a)) ==
-    if (terminaRonda(j, p, a))
-    then 1
-    else paso(j) + 1
-    fi
 
 vivePJ?(iniciar(pjs, as, u, h), p) == true
 vivePJ?(proxPaso(j, p, a), p') ==
     if (p = p')
     then ¬ moriraPJ(j, fantasmas(j), p, a)
-    else vivePJ?(j, p')
+    else vivePJ?(j, p') ^
+         ¬ moriraPJ(j, fantasmas(j), p, nada)
+    fi
+    // Nota: Si p = p', entonces por la reestricción de proxPaso 
+    //       sabemos que está vivo en rondas anteriores, no hace falta preguntarlo
+
 
 viveFan?(iniciar(pjs, as, u, h), f) == true
 viveFan?(proxPaso(j, p, a), f) ==
+    viveFan?(j, f) ^       // No tiene que haber muerto en pasos anteriores
     ¬ moriraFantasma(j, p, a, f)
 
 ubicacionInicialFan(iniciar(pjs, as, u, h), f') == u
+
 ubicacionInicialFan(proxPaso(j, p, a), f) ==
     // Si f no pertence a los fantasmas del juego antes de efectuar el paso, entonces es nuevo, y fue la acción de p la que finalizó la ronda, así agregando un nuevo fantasma.
     if f € fantasmas(j)
@@ -147,14 +143,16 @@ ubicacionInicialFan(proxPaso(j, p, a), f) ==
     else ubicacionInicialPJ(j, p)  // es nuevo
     fi
 
+
 accionesPJs(iniciar(pjs, as, u, h)) ==
     inicializarAcciones(pjs)
 
 accionesPJs(proxPaso(j, p, a)) ==
     if ¬ terminaRonda(j, p, a)
-    then agregarAccion(accionesPJs(j), jugadores(j), p, a)
+    then definir(p, obtener(p, accionesPJs(j)) ° a, accionesPJs(j))
     else inicializarAcciones(jugadores(j))
     fi
+
 
 accionesFan(iniciar(pjs, as, u, h)) ==
     definir(nombreSiguienteFan(j), as, vacío)
@@ -171,6 +169,15 @@ accionesFan(proxPaso(j, p, a)) ==
                          obtener(p, accionesPJs(j)) ° a)
 
 /////////////// otras operaciones
+ronda(j) = #(fantasmas(j))
+paso(j) = cantPasos(j, jugadores(j))
+
+cantPasos(j, pjs) == if ø?(pjs)
+                     then 0
+                     else long(obtener(dameUno(pjs)), accionesPJs(j)) + cantPasos(j, sinUno(pjs))
+                     fi
+
+
 pos(u) = π_1(u)
 dir(u) = π_2(u)
 
@@ -217,23 +224,6 @@ agregarFantasma(h, uInicialPJ, accionesFantasmas, f, as) ==
 generarAccionesFantasma(h, uInicialPJ, as) ==
     as & (nada * nada * nada * nada * nada * <>) & invertir(h, uInicialPJ, as)
 
-// Setea la acción a al pj p, y al resto le pone nada, porque se mueve 1 solo
-agregarAccion(acciones, pjs, p, a) ==
-    if ø?(pjs)
-    then vacio
-    else if dameUno(pjs) == p
-         then definir(p,
-                      obtener(p, acciones) ° a,
-                      agregarAccion(acciones, sinUno(pjs), p, a))
-
-         else if vivePJ?(dameUno(pjs)
-              then definir(dameUno(pjs),
-                           obtener(dameUno(pjs), acciones) ° nada,
-                           agregarAccion(acciones, sinUno(pjs), p, a))
-              else agregarAccion(acciones, sinUno(pjs), p, a)
-         fi
-    fi
-
 
 inicializarAcciones(pjs) ==
     if ø?(pjs)
@@ -244,20 +234,18 @@ inicializarAcciones(pjs) ==
 terminaRonda(j, p, a) == moriraFantasma(j, p, a, fantasmaEspecial(j))
 
 moriraFantasma(j, p, a, f) ==
-    a = disparar ^
-    pos(ubicacionFan(j, f)) € posicionesAfectadasPor(disparar, hab(j), ubicacionPJ(j, p))
+    pos(ubicacionFan(j, f)) € posicionesAfectadasPor(a, hab(j), ubicacionPJ(j, p))
 
 moriraPJ(j, fs, p, a) ==
     if ø?(fs)
     then false
-    else (moriraPorFantasma(j, dameUno(fs), p, a) v
+    else (moriraPJPorFantasma(j, dameUno(fs), p, a) v
           moriraPj(j, sinUno(fs), p, a))
     fi
 
-moriraPorFantasma(j, f, p, a) ==
+moriraPJPorFantasma(j, f, p, a) ==
     ¬ moriraFantasma(j, p, a, f) ^
-    accionFan(j, f) = disparar ^
-    pos(ubicacionLuegoDe(a, hab(j), ubicacionPJ(j, p))) € posicionesAfectadasPor(disparar, hab(j), ubicacionFan(j, f))
+    pos(ubicacionLuegoDe(a, hab(j), ubicacionPJ(j, p))) € posicionesAfectadasPor(accionFan(j, f), hab(j), ubicacionFan(j, f))
 
 
 accionFan(j, f) == (obtener(accionesFan(j), f))[paso(j) % obtener(accionesFan(j), f)]
