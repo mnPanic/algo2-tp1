@@ -1,6 +1,14 @@
 # algo2-tp1
 Trabajo práctico de especificación de Algoritmos II
 
+## Division de tareas
+Pasado a latex:
+
+- Manu: juego
+- Schuster: habitacion, secuencia, ubicacion, NAT
+- Gasti: accion, direccion
+
+
 ## Notas sobre enunciado
 
 - Habitación: Grilla cuadrada con casilleros
