@@ -44,9 +44,6 @@ posicionesAfectadasPor : accion a x hab h x ubicacion u -> conj(pos) {esValida?(
 ¬\* : accion -> accion
 
 invertir : hab h x ubicacion u x secu(accion) -> secu(accion)       {esValida?(h, pos(u))}
-
-esMirar : accion -> bool
-
 ```
 
 generadores
@@ -63,6 +60,18 @@ axiomatización
 --------------
 
 ```text
+posicionesAfectadasPor(mover(d), h, u) = ø
+posicionesAfectadasPor(mirar(d), h, u) = ø
+posicionesAfectadasPor(nada, h, u) = ø
+
+posicionesAfectadasPor(disparar, h, u) =
+    if esValida?(h, proxPosEnDir(dir(u), pos(u)) ^L ¬ estaOcupada?(h, proxPosEnDir(dir(u), pos(u)))
+    then Ag(proxPosEnDir(dir(u), pos(u)),
+            posicionesAfectadasPor(disparar,
+                                   h,
+                                   <proxPosEnDir(dir(u), pos(u)), dir(u)>))
+    else ø
+
 invertir(h, u, as) ==
     if vacía?(as)
     then <>
