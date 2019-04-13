@@ -11,12 +11,16 @@ generos
 hab
 ```
 
+exporta
+-------
+generos, observadores, generadores, esCoenxa?
+
 observadores
 ------------
 
 ```text
 esValida? : hab x pos -> bool
-estaOcupada? : hab h x pos c -> bool           {esValida?(c, h)}
+estaOcupada? : hab h x pos p -> bool           {esValida?(h, p)}
 ```
 
 igualdad observacional
@@ -24,32 +28,34 @@ igualdad observacional
 
 ```text
 (V h1, h2 : hab) (h1 =obs h2) <=>
-    (V c : pos) esValida(c, h1) =obs esValida(c, h2) ^L
-                  esValida(c, h1) =>L (estaOcupada? (c, h1) =obs estaOcupada?(c, h2))
+    (V p : pos) (esValida(p, h1) =obs esValida(p, h2)) ^L
+                esValida(p, h1) =>L (estaOcupada? (p, h1) =obs estaOcupada?(p, h2))
 ```
 
 generadores
 -----------
 
 ```text
-nueva : nat n -> hab                        {n > 1}
-ocupar : hab h x pos c -> hab               {esValida?(c, h) ^L ¬ estaOcupada?(c)}
+nueva  : nat n -> hab                        {n > 1}  // Decisión tomada, tiene que ser de 2 o mas porque sino nadie muere.
+ocupar : hab h x pos p -> hab                {esValida?(h, p) ^L ¬ estaOcupada?(h, p)}
 ```
 
 otras operaciones
 -----------------
 
 ```text
-tamaño : hab -> nat
-
 esConexa? : hab -> bool
 
 // auxiliares
-posicionesLibres : hab x conj(pos) -> conj(pos)
-verificarAlcance : hab x conj(pos) x conj(pos) -> bool
-verificarAlcancePos : hab x pos x conj(pos) -> bool
-darPosiciones : hab x nat x nat x nat - > conj(pos)
+tamaño : hab -> nat
+posicionesLibres : hab h x conj(pos) ps -> conj(pos)             {ps C posiciones(h)}
+verificarAlcance : hab h x conj(pos) ps -> bool       {ps C posiciones(h)}
+verificarAlcancePos : hab h x conj(pos) ps x pos p -> bool   {ps C posiciones(h) ^ p € posiciones(h)}
+
 posiciones : hab -> conj(pos)
+
+darPosiciones : hab x nat x nat x nat - > conj(pos)
+
 
 // Funcion dada
 esAlcanzable : hab x pos x pos -> bool
@@ -59,27 +65,29 @@ axiomatización
 --------------
 
 ```text
-esValida?(p, nueva(n)) ==  0 ≤ π_1(p) < n ^
-                            0 ≤ π_2(p) < n
+esValida?(nueva(n), p) ==  0 ≤ π_1(p) < n ^
+                           0 ≤ π_2(p) < n
 
-esValida?(p, ocupar(p', h)) == p = p' vL esValida?(p, h)
+esValida?(ocupar(h, p'), p) == p = p' vL esValida?(h, p)
 
-estaOcupada?(p, nuevo(n)) == false
-estaOcupada?(p, ocupar(p', h)) ==
-    p = p' v estaOcupada?(p, h)
+estaOcupada?(nuevo(n), p) == false
+estaOcupada?(ocupar(h, p'), p) ==
+    p = p' v estaOcupada?(h, p)
 
 tamaño(nueva(n)) == n
-tamaño(ocupar(p, h)) == tamaño(h)
-
-posicionesLibres(ps) == if ø?(ps)
-                      then ø
-                      else (if estaOcupada?(dameUno(ps))
-                            then ø
-                            else {dameUno(ps)}
-                            fi) U posicionesLibres(sinUno(ps))
-                      fi
+tamaño(ocupar(h, p)) == tamaño(h)
 
 esConexa?(h) == verificarAlcance(h, posicionesLibres(posiciones(h)))
+
+posicionesLibres(h, ps) ==
+      if ø?(ps)
+      then ø
+      else (if estaOcupada?(h, dameUno(ps))
+            then ø
+            else {dameUno(ps)}
+            fi) U posicionesLibres(h, sinUno(ps))
+      fi
+
 
 verificarAlcance(h, ps) == if ø?(ps)
                             then true
@@ -100,6 +108,4 @@ darPosiciones(h, n, k, tam) == if n = 0 ^ k = 0
                                else if k = 0
                                then Ag((n,k), darPosiciones(h, n-1, tam, tam))
                                else Ag((n,k), darPosiciones(h, n, k-1, tam))
-
-// TODO: axiomatizar posiciones @Schuster
 ```
