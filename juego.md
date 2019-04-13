@@ -4,9 +4,6 @@ TAD PJ ES NAT
 TAD Fantasma ES NAT
 ===================
 
-TAD Dirección ES String
-=======================
-
 TAD Ubicación ES tupla(posicion, direccion)
 ===========================================
 
@@ -53,7 +50,7 @@ iniciar : conj(pj) pjs x secu(acciones) as x ubicacion x hab h -> juego
     {esConexa(h) ^ ¬ ø?(as) ^ ¬ ø?(pjs)}
 
 proxPaso : juego j x pj p x accion a -> juego
-    {p € jugadores(j) ^L vivePJ?(j, p) ^ ¬ termino?(j)}
+    {p € jugadores(j) ^L vivePJ?(j, p) ^ ¬ termino?(j) ^ ¬ esMirar(a)}
 ```
 
 otras operaciones
@@ -80,11 +77,12 @@ estanVivos : juego j x conj(pj) pjs -> bool         {pjs C jugadores(j)}
 
 fantasmaEspecial : juego -> fantasma
 
+ubicacionInicialPJ : juego j x pj p -> ubicacion     {p € jugadores(j)}
 ubicacionPJ  : juego j x pj p -> ubicacion           {p € jugadores(j)}
 ubicacionFan : juego j x fantasma f -> ubicacion     {f € fantasmas(j)}
 
 deducirUbicacion : juego j x ubicacion u x acciones -> ubicacion
-    {esValida?(hab(j), u)}
+    {esValida?(hab(j), pos(u))}
 
 moriraFantasma : juego j x pj p x accion x fantasma f -> bool
     {p € jugadores(j) ^ f € fantasmas(j)}
@@ -101,7 +99,11 @@ puntaje : juego -> nat
 
 inicializarAcciones : conj(pj) -> dicc(pj, secu(accion))
 
-agregarFantasma : dicc(fantasma, secu(accion)) x fantasma x secu(accion) -> dicc(fantasma, secu(accion))
+agregarFantasma : hab h x ubicacion u x dicc(fantasma, secu(accion)) x fantasma x secu(accion) -> dicc(fantasma, secu(accion))
+    {esValida?(h, pos(u))}
+
+generarAccionesFantasma : hab h x ubicacion u x secu(accion) -> secu(accion) {esValida?(h, u)}
+
 
 nombreSiguienteFan : juego -> fantasma
 ```
@@ -132,14 +134,13 @@ viveFan?(proxPaso(j, p, a), f) ==
     viveFan?(j, f) ^       // No tiene que haber muerto en pasos anteriores
     ¬ moriraFantasma(j, p, a, f)
 
-
 ubicacionInicialFan(iniciar(pjs, as, u, h), f') == u
 
 ubicacionInicialFan(proxPaso(j, p, a), f) ==
     // Si f no pertence a los fantasmas del juego antes de efectuar el paso, entonces es nuevo, y fue la acción de p la que finalizó la ronda, así agregando un nuevo fantasma.
     if f € fantasmas(j)
     then ubicacionInicialFan(j, f)
-    else obtener(p, localizarJugadores(j))  // es nuevo
+    else ubicacionInicialPJ(j, p)  // es nuevo
     fi
 
 
@@ -161,7 +162,9 @@ accionesFan(proxPaso(j, p, a)) ==
     then accionesFan(j)
     // Como termina la ronda luego de la acción de p, p lo mató.
     // Le agrego las acciones de p al nuevo fantasma
-    else agregarFantasma(accionesFan(j),
+    else agregarFantasma(hab(j),
+                         ubicacionInicialPJ(j, p),
+                         accionesFan(j),
                          nombreSiguienteFan(j),
                          obtener(p, accionesPJs(j)) ° a)
 
@@ -194,9 +197,11 @@ estanVivos(j, pjs) ==
 fantasmaEspecial(j) == #(claves(accionesFan(j)))
 
 
+ubicacionInicialPJ(j, p) == obtener(p, localizarJugadores(j))
+
 ubicacionPJ(j, p) ==
     deducirUbicacion(j,
-                     obtener(p, localizarJugadores(j))
+                     ubicacionInicialPJ(j, p)
                      obtener(p, accionesPJs(j)))
 
 ubicacionFan(j, f) ==
@@ -213,11 +218,11 @@ deducirUbicacion(j, u, as) ==
                           fin(as))
     fi
 
-agregarFantasma(accionesFantasmas, f, as) ==
-    definir(f, generarAccionesFantasma(as), accionesFantasmas)
+agregarFantasma(h, uInicialPJ, accionesFantasmas, f, as) ==
+    definir(f, generarAccionesFantasma(h, uInicialPJ, as), accionesFantasmas)
 
-generarAccionesFantasma(as) ==
-    as & (nada * nada * nada * nada * nada * <>) & invertir(as)
+generarAccionesFantasma(h, uInicialPJ, as) ==
+    as & (nada * nada * nada * nada * nada * <>) & invertir(h, uInicialPJ, as)
 
 
 inicializarAcciones(pjs) ==
