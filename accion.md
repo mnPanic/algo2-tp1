@@ -8,6 +8,10 @@ generos
 acción
 ```
 
+exporta
+-------
+observadores, generadores, genero, otras operaciones
+
 igualdad observacional
 ----------------------
 

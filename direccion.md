@@ -8,6 +8,10 @@ genero
 direccion
 ```
 
+exporta
+-------
+observadores, generadores, otras operaciones
+
 igualdad observacional
 ----------------------
 
