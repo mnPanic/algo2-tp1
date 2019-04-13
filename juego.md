@@ -51,8 +51,8 @@ generadores
 -----------
 
 ```text
-iniciar : conj(pj) pjs x secu(acciones) as x ubicacion x hab h -> juego
-    {esConexa(h) ^ ¬ ø?(as) ^ ¬ ø?(pjs)}
+iniciar : conj(pj) pjs x secu(acciones) as x ubicacion u x hab h -> juego
+    {esConexa(h) ^ ¬ ø?(as) ^ ¬ ø?(pjs) ^ esValida?(h, pos(u))}
 
 proxPaso : juego j x pj p x accion a -> juego
     {p € jugadores(j) ^L vivePJ?(j, p) ^ ¬ termino?(j) ^ ¬ esMirar(a)}
@@ -64,7 +64,7 @@ otras operaciones
 ```text
 ronda : juego -> nat
 paso  : juego -> nat
-cantPasos : juego x conj(pj) -> nat
+cantAcciones : juego x conj(pj) -> nat
 
 
 jugadores : juego -> conj(pj)
@@ -102,11 +102,10 @@ puntaje : juego -> nat
 
 inicializarAcciones : conj(pj) -> dicc(pj, secu(accion))
 
-agregarFantasma : hab h x ubicacion u x dicc(fantasma, secu(accion)) x fantasma x secu(accion) -> dicc(fantasma, secu(accion))
-    {esValida?(h, pos(u))}
+agregarFantasma : juego j x ubicacion u x dicc(fantasma, secu(accion)) x fantasma x secu(accion) -> dicc(fantasma, secu(accion))
+    {esValida?(hab(j), pos(u))}
 
-generarAccionesFantasma : hab h x ubicacion u x secu(accion) -> secu(accion) {esValida?(h, u)}
-
+generarAccionesFantasma : juego j x ubicacion u x secu(accion) -> secu(accion) {esValida?(hab(j), pos(u))}
 
 nombreSiguienteFan : juego -> fantasma
 ```
@@ -123,19 +122,22 @@ hab(proxPaso(j, p, a)) == hab(j)
 
 vivePJ?(iniciar(pjs, as, u, h), p) == true
 vivePJ?(proxPaso(j, p, a), p') ==
+    // Si con la acción de p termina la ronda, reviven todos.
+    terminaRonda?(j, p, a) v
     if (p = p')
     then ¬ moriraPJ(j, fantasmas(j), p, a)
     else vivePJ?(j, p') ^
-         ¬ moriraPJ(j, fantasmas(j), p, nada)
+         ¬ moriraPJ(j, fantasmas(j), p', nada)
     fi
-    // Nota: Si p = p', entonces por la reestricción de proxPaso 
+    // Nota: Si p = p', entonces por la reestricción de proxPaso
     //       sabemos que está vivo en rondas anteriores, no hace falta preguntarlo
 
 
 viveFan?(iniciar(pjs, as, u, h), f) == true
 viveFan?(proxPaso(j, p, a), f) ==
-    viveFan?(j, f) ^       // No tiene que haber muerto en pasos anteriores
-    ¬ moriraFantasma(j, p, a, f)
+    terminaRonda?(j, p, a) v
+    (viveFan?(j, f) ^       // No tiene que haber muerto en pasos anteriores
+    ¬ moriraFantasma(j, p, a, f))
 
 ubicacionInicialFan(iniciar(pjs, as, u, h), f') == u
 
@@ -163,9 +165,9 @@ accionesFan(iniciar(pjs, as, u, h)) ==
 accionesFan(proxPaso(j, p, a)) ==
     if ¬ terminaRonda(j, p, a)
     then accionesFan(j)
-    // Como termina la ronda luego de la acción de p, p lo mató.
+    // Como termina la ronda luego de la acción de p, p mató al fantasma especial.
     // Le agrego las acciones de p al nuevo fantasma
-    else agregarFantasma(hab(j),
+    else agregarFantasma(j,
                          ubicacionInicialPJ(j, p),
                          accionesFan(j),
                          nombreSiguienteFan(j),
@@ -173,18 +175,18 @@ accionesFan(proxPaso(j, p, a)) ==
 
 /////////////// otras operaciones
 ronda(j) = #(fantasmas(j))
-paso(j) = cantPasos(j, jugadores(j))
+paso(j) = cantAcciones(j, jugadores(j))
 
-cantPasos(j, pjs) == if ø?(pjs)
-                     then 0
-                     else long(obtener(dameUno(pjs)), accionesPJs(j)) + cantPasos(j, sinUno(pjs))
-                     fi
-
+cantAcciones(j, pjs) ==
+    if ø?(pjs)
+    then 0
+    else long(obtener(dameUno(pjs)), accionesPJs(j)) + cantAcciones(j, sinUno(pjs))
+    fi
 
 jugadores(j) == claves(accionesPJs(j))
 fantasmas(j) == claves(accionesFan(j))
 
-termino?(j) == estanVivos(j, jugadores(j))
+termino?(j) == ¬ estanVivos(j, jugadores(j))
 
 estanVivos(j, pjs) ==
     if ø?(pjs)
@@ -217,12 +219,11 @@ deducirUbicacion(j, u, as) ==
                           fin(as))
     fi
 
-agregarFantasma(h, uInicialPJ, accionesFantasmas, f, as) ==
-    definir(f, generarAccionesFantasma(h, uInicialPJ, as), accionesFantasmas)
+agregarFantasma(j, uInicialPJ, accionesFantasmas, f, as) ==
+    definir(f, generarAccionesFantasma(j, uInicialPJ, as), accionesFantasmas)
 
-generarAccionesFantasma(h, uInicialPJ, as) ==
-    as & (nada * nada * nada * nada * nada * <>) & invertir(h, uInicialPJ, as)
-
+generarAccionesFantasma(j, uInicialPJ, as) ==
+    as & (nada * nada * nada * nada * nada * <>) & invertir(hab(j), uInicialPJ, as)
 
 inicializarAcciones(pjs) ==
     if ø?(pjs)
@@ -239,7 +240,7 @@ moriraPJ(j, fs, p, a) ==
     if ø?(fs)
     then false
     else (moriraPJPorFantasma(j, dameUno(fs), p, a) v
-          moriraPj(j, sinUno(fs), p, a))
+          moriraPJ(j, sinUno(fs), p, a))
     fi
 
 moriraPJPorFantasma(j, f, p, a) ==
