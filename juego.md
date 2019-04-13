@@ -4,7 +4,6 @@ TAD PJ ES NAT
 TAD Fantasma ES NAT
 ===================
 
-
 TAD Juego
 =========
 
@@ -37,7 +36,15 @@ igualdad observacional
 ----------------------
 
 ```text
-TODO
+(V j, j': juego) j =obs j' <=>
+    accionesPJs(j) =obs accionesPJs(j') ^
+    accionesFan(j) =obs accionesFan(j') ^
+    hab(j) =obs hab(j') ^
+    localizarJugadores(j) = localizarJugadores(j') ^
+    (V p : pj) vivePJ?(j, p) =obs vivePJ?(j', p) ^
+    (V f : fantasma) viveFan?(j, f) =obs viveFan?(j', f) ^
+                     ubicacionInicialFan(j, f) =obs ubicacionInicialFan(j', f)
+
 ```
 
 generadores
