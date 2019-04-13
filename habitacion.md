@@ -43,10 +43,9 @@ otras operaciones
 tamaño : hab -> nat
 
 esConexa? : hab -> bool
-posicionesLibres : hab -> conj(pos)
 
 // auxiliares
-filtrarLibres : hab x conj(pos) -> conj(pos)
+posicionesLibres : hab x conj(pos) -> conj(pos)
 verificarAlcance : hab x conj(pos) x conj(pos) -> bool
 verificarAlcancePos : hab x pos x conj(pos) -> bool
 darPosiciones : hab x nat x nat x nat - > conj(pos)
@@ -72,16 +71,15 @@ estaOcupada?(p, ocupar(p', h)) ==
 tamaño(nueva(n)) == n
 tamaño(ocupar(p, h)) == tamaño(h)
 
-posicionesLibres(h) == filtrarLibres(posiciones(h))
-filtrarLibres(ps) == if ø?(ps)
+posicionesLibres(ps) == if ø?(ps)
                       then ø
                       else (if estaOcupada?(dameUno(ps))
                             then ø
                             else {dameUno(ps)}
-                            fi) U filtrarLibres(sinUno(ps))
+                            fi) U posicionesLibres(sinUno(ps))
                       fi
 
-esConexa?(h) == verificarAlcance(h, posicionesLibres(h))
+esConexa?(h) == verificarAlcance(h, posicionesLibres(posiciones(h)))
 
 verificarAlcance(h, ps) == if ø?(ps)
                             then true
