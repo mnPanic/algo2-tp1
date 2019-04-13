@@ -1,0 +1,98 @@
+\documentclass[10pt, a4paper]{article}
+\usepackage[paper=a4paper, left=1.5cm, right=1.5cm, bottom=1.5cm, top=3.5cm]{geometry}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{indentfirst}
+\usepackage{fancyhdr}
+\usepackage{latexsym}
+\usepackage{lastpage}
+\usepackage{aed2-symb,aed2-itef,aed2-tad}
+\usepackage[colorlinks=true, linkcolor=blue]{hyperref}
+\usepackage{calc}
+
+\newcommand{\f}[1]{\text{#1}}
+\renewcommand{\paratodo}[2]{$\forall~#2$: #1}
+
+\sloppy
+
+\hypersetup{%
+ % Para que el PDF se abra a p�gina completa.
+ pdfstartview= {FitH \hypercalcbp{\paperheight-\topmargin-1in-\headheight}},
+ pdfauthor={C�tedra de Algoritmos y Estructuras de Datos II - DC - UBA},
+ pdfkeywords={TADs b�sicos},
+ pdfsubject={Tipos abstractos de datos b�sicos}
+}
+
+\parskip=5pt % 10pt es el tama�o de fuente
+
+% Pongo en 0 la distancia extra entre �temes.
+\let\olditemize\itemize
+\def\itemize{\olditemize\itemsep=0pt}
+
+% Acomodo fancyhdr.
+\pagestyle{fancy}
+\thispagestyle{fancy}
+\addtolength{\headheight}{1pt}
+\lhead{Algoritmos y Estructuras de Datos II}
+\rhead{$1^{\mathrm{er}}$ cuatrimestre de 2012}
+\cfoot{\thepage /\pageref{LastPage}}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\author{Algoritmos y Estructuras de Datos II, DC, UBA.}
+\date{}
+\title{Tipos abstractos de datos b�sicos}
+
+\begin{document}
+%Pagina de titulo e indice
+\thispagestyle{empty}
+
+\maketitle
+\tableofcontents
+
+\newpage
+
+% TADs
+\section{TAD \tadNombre{PJ}}
+\section{TAD \tadNombre{Fantasma}}
+\section{TAD \tadNombre{Juego}}
+
+\begin{tad}{\tadNombre{Juego}}
+    \tadGeneros{juego}
+    \tadExporta{TODO}
+    \tadUsa{\tadNombre{Habitacion}}
+
+    \tadIgualdadObservacional{j}{j'}{juego}{$(n=0? \igobs m=0?)\ \yluego$\\ $(\neg(n=0?) \impluego (\text{pred}(n) \igobs \text{pred}(m)))$}
+    \tadIgualdadObservacional{j}{j'}{juego}{
+        (accionesPJs(j) $\igobs$ accionesPJs(j')) $\land$ \\
+        (accionesFan(j) $\igobs$ accionesFan(j')) $\land$ \\
+        (localizarJugadores(j) $\igobs$ localizarJugadores(j')) $\land$ \\
+        (hab(j) $\igobs$ hab(j')) $\land$ \\
+        (($\forall$ p : pj) (vivePJ?(j, p) \igobs vivePJ?(j', p))) $\land$ \\
+        (($\forall$ f : fantasma) ((viveFan?(j, p) \igobs viveFan?(j', p)) $\land$ \\
+                                   (ubicacionInicialFan(j, f) \igobs ubicacionInicialFan(j', f)))
+    }
+
+    
+    \tadAlinearFunciones{ubicacionInicialFan}{juego/j, fantasma/f}
+
+    \tadObservadores
+        \tadOperacion{accionesPJs}{juego}{dicc(pj, secu(accion))}{}
+        \tadOperacion{accionesFan}{juego}{dicc(pj, secu(accion))}{}
+        \tadOperacion{hab}{juego}{hab}{}
+        \tadOperacion{vivePJ?}{juego/j, pj/p}{bool}{p $\in$ jugadores(j)}
+        \tadOperacion{viveFan?}{juego/j, fantasma/f}{bool}{f $\in$ fantasmas(j)}
+        \tadOperacion{ubicacionInicialFan}{juego/j, fantasma/f}{ubicacion}{f $\in$ fantasmas(f)}
+        \tadOperacion{localizarJugadores}{juego}{dicc(pj, ubicacion)}{}
+    
+    \tadGeneradores
+
+    \tadOtrasOperaciones
+
+    \tadAxiomas[\paratodo{nat}{n, m}]
+    \tadAlinearAxiomas{pred(suc($n$))}
+    \tadAxioma{$0=0?$}{true}
+
+\end{tad}
+
+\end{document}
