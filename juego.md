@@ -4,8 +4,6 @@ TAD PJ ES NAT
 TAD Fantasma ES NAT
 ===================
 
-TAD Ubicación ES tupla(posicion, direccion)
-===========================================
 
 TAD Juego
 =========
@@ -61,8 +59,6 @@ ronda : juego -> nat
 paso  : juego -> nat
 cantPasos : juego x conj(pj) -> nat
 
-pos : ubicacion -> posicion
-dir : ubicacion -> dirección
 
 jugadores : juego -> conj(pj)
 fantasmas : juego -> conj(fantasma)
@@ -176,10 +172,6 @@ cantPasos(j, pjs) == if ø?(pjs)
                      then 0
                      else long(obtener(dameUno(pjs)), accionesPJs(j)) + cantPasos(j, sinUno(pjs))
                      fi
-
-
-pos(u) = π_1(u)
-dir(u) = π_2(u)
 
 
 jugadores(j) == claves(accionesPJs(j))
