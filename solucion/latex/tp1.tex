@@ -53,10 +53,8 @@
 \newpage
 
 % TADs
-\section{TAD \tadNombre{PJ}}
-\section{TAD \tadNombre{Fantasma}}
-\section{TAD \tadNombre{Juego}}
 
+\section{TAD \tadNombre{Juego}}
 \begin{tad}{\tadNombre{Juego}}
     \tadGeneros{juego}
     \tadExporta{TODO}
@@ -108,31 +106,31 @@
 \begin{tad}{\tadNombre{Habitacion}}
   \tadGeneros{hab}
   \tadExporta{hab, observadores, generadores, esConexa?}
-  \tadUsa{\tadNombre{pos, bool, nat}}
+  \tadUsa{\tadNombre{posicion, bool, nat}}
 
-  \tadIgualdadObservacional{h}{h'}{hab}{$(\forall p:\text{pos})$(esValida?($p, h$) $\igobs$ esValida?($p, h'$) $\yluego$ \\ (esValida?($p, h$) $\impluego$ \\(estaOcupada?($p, h$) $\igobs$ estaOcupada?($p, h'$))))}
-  \tadAlinearFunciones{verificarAlcancePos}{hab,conj(pos),conj(pos)}
+  \tadIgualdadObservacional{h}{h'}{hab}{$(\forall p:\text{posicion})$(esValida?($p, h$) $\igobs$ esValida?($p, h'$) $\yluego$ \\ (esValida?($p, h$) $\impluego$ \\(estaOcupada?($p, h$) $\igobs$ estaOcupada?($p, h'$))))}
+  \tadAlinearFunciones{verificarAlcancePos}{hab,conj(posicion),conj(posicion)}
 
 
   \tadObservadores
-    \tadOperacion{esValida?}{hab,pos}{bool}{} %Decisión tomada, tiene que ser de 2 o mas porque sino nadie muere.
-    \tadOperacion{estaOcupada?}{hab/h,pos/p}{bool}{esValida?(h, p)}
+    \tadOperacion{esValida?}{hab,posicion}{bool}{} %Decisión tomada, tiene que ser de 2 o mas porque sino nadie muere.
+    \tadOperacion{estaOcupada?}{hab/h,posicion/p}{bool}{esValida?(h, p)}
 
   \tadGeneradores
     \tadOperacion{nueva}{nat/n}{hab}{n>1}
-    \tadOperacion{ocupar}{hab/h,pos/p}{hab}{esValida?(h, p) \yluego $\neg$ estaOcupada?(h, p)}
+    \tadOperacion{ocupar}{hab/h,posicion/p}{hab}{esValida?(h, p) \yluego $\neg$ estaOcupada?(h, p)}
 
   \tadOtrasOperaciones
     \tadOperacion{esConexa?}{hab}{bool}{}
     \tadOperacion{tamano}{hab}{nat}{}
-    \tadOperacion{posiciones}{hab}{conj(pos)}{}
-    \tadOperacion{posicionesLibres}{hab/h,conj(pos)/ps}{conj(pos)}{ps $\subseteq$ posiciones(h)}
-    \tadOperacion{verificarAlcance}{hab/h,conj(pos)/ps}{bool}{ps $\subseteq$ posiciones(h)}
-    \tadOperacion{verificarAlcancePos}{hab/h,conj(pos)/ps,pos/p}{bool}{ps $\subseteq$ posiciones(h) $\land$ p $\in$ posiciones(h)}
+    \tadOperacion{posiciones}{hab}{conj(posicion)}{}
+    \tadOperacion{posicionesLibres}{hab/h,conj(posicion)/ps}{conj(posicion)}{ps $\subseteq$ posiciones(h)}
+    \tadOperacion{verificarAlcance}{hab/h,conj(posicion)/ps}{bool}{ps $\subseteq$ posiciones(h)}
+    \tadOperacion{verificarAlcancePos}{hab/h,conj(posicion)/ps,posicion/p}{bool}{ps $\subseteq$ posiciones(h) $\land$ p $\in$ posiciones(h)}
 
 \tadAlinearFunciones{estaOcupada?(ocupar(h,p'),p)}{}
 
-  \tadAxiomas[\paratodo{hab}{h} \paratodo{conj(pos)}{ps} \paratodo{pos}{p} \paratodo{nat}{n,k,tam}]
+  \tadAxiomas[\paratodo{hab}{h} \paratodo{conj(posicion)}{ps} \paratodo{posicion}{p} \paratodo{nat}{n,k,tam}]
   \tadAlinearAxiomas{estaOcupada?(ocupar(h,p'),p)}
     \tadAxioma{esValida?(nueva(n),p)}{0 $\leq$ $\Pi_1$(p) < \ n $\land$ 0 $\leq$ $\Pi_2$(p) < \ n}
     
@@ -309,5 +307,36 @@
 
     
 \end{tad}{}
+
+\section{\tadNombre{Extensiones y Renombres}}
+
+\textbf{TAD} \tadNombre{Fantasma} \textbf{ES} \tadNombre{Nat} \\ \\
+\textbf{TAD} \tadNombre{PJ} \textbf{ES} \tadNombre{Nat} \\ \\
+\textbf{TAD} \tadNombre{Posicion} \textbf{ES} \tadNombre{tupla(nat, nat)}
+
+\begin{tad}{\tadNombre{Nat} \textbf{extiende} \tadNombre{Nat}}
+
+\tadOtrasOperaciones
+    \tadOperacion{$\bullet \ \% \ \bullet$}{nat, nat}{nat}{}
+    \tadAxiomas[\paratodo{nat}{n,m}]
+    \tadAxioma{n $\%$ m}{\textbf{if} n < \ m \textbf{then} n \textbf{else} (n - m) $\%$ m \textbf{fi}}
+\end{tad}
+
+\begin{tad}{\tadNombre{Ubicacion} \textbf{extiende} \tadNombre{tupla(posicion, direccion)}}
+\tadOtrasOperaciones
+    \tadOperacion{pos}{ubicacion}{posicion}{}
+    \tadOperacion{dir}{ubicacion}{direccion}{}
+    \tadAxiomas[\paratodo{ubicacion}{u}]
+    \tadAxioma{pos(u)}{$\Pi_1$(u)}
+    \tadAxioma{dir(u)}{$\Pi_2$(u)}
+\end{tad}
+
+\begin{tad}{\tadNombre{Secuencia} \textbf{extiende} \tadNombre{Secuencia}}
+\tadOtrasOperaciones
+    \tadOperacion{$\bullet[\bullet]$}{secu($\alpha$)/s, nat/i}{$\alpha$}{i < \ long(s)}
+    \tadAxiomas[\paratodo{secu($\alpha$)}{s}, \paratodo{nat}{i}]
+    \tadAxioma{s$[i]$}{\textbf{if} $i = 0?$ \textbf{then} prim(s) \textbf{else} fin(s)$[i - 1]$ \textbf{fi}}
+\end{tad}
+
 
 \end{document}
