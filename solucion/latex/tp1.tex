@@ -201,24 +201,24 @@
         \tadAxioma{posicionesAfectadasPor(mirar(d), h, u)}{$\emptyset$}
         \tadAxioma{posicionesAfectadasPor(nada, h, u)}{$\emptyset$}
         \tadAxioma{posicionesAfectadasPor(disparar, h, u)}{
-            \IF esValida?(h, proxPosEnDir(dir(u), pos(u)) $\yluego$ \\
+            \textbf{if} esValida?(h, proxPosEnDir(dir(u), pos(u)) $\yluego$ \\
             $\neg$estaOcupada?(h, proxPosEnDir(dir(u), pos(u))) \\
-            THEN Ag(proxPosEnDir(dir(u), pos(u)), \\ 
-            posicionesAfectadasPor(disparar,h, \\
-            $\langle$proxPosEnDir(dir(u), pos(u)), dir(u)$\rangle$)) \\
-            ELSE $\emptyset$ 
-            FI}
+            \textbf{then} \\ Ag(proxPosEnDir(dir(u), pos(u)),posicionesAfectadasPor(disparar,h, $\langle$proxPosEnDir(dir(u), pos(u)), dir(u)$\rangle$)) \\
+            \textbf{else} $\emptyset$ \\
+            \textbf{fi}}
+
         \tadAxioma{invertir(h, u, as)}{
-            \IF vacia?(as) 
-            THEN $<>$ 
-            ELSE invertir(h, ubicacionLuegoDe(prim(as), h, u), fin(as)) $\lor$  $\neg$(prim(as), h, u)
-            FI
+            \textbf{if} vacia?(as) \\
+            \textbf{then} $<>$ \\ 
+            \textbf{else} \\ 
+            invertir(h, ubicacionLuegoDe(prim(as), h, u), fin(as)) $\lor$ $\neg$(prim(as), h, u) \\
+            \textbf{fi}
         }
         \tadAxioma{$\neg$(mover(d), h, u)}{
-            \IF pos(ubicacionLuegoDe(mover(d), h, u)) = pos(u) \\
-            THEN mirar(opuesta(d))
-            ELSE mover(opuesta(d))
-            FI
+            \textbf{if} pos(ubicacionLuegoDe(mover(d), h, u)) = pos(u) \\
+            \textbf{then} mirar(opuesta(d)) \\
+            \textbf{else} mover(opuesta(d)) \\
+            \textbf{fi}
         }
         \tadAxioma{$\neg$(mirar(d), h, u)}{mirar(opuesta(d))}
         \tadAxioma{$\neg$(disparar, h, u)}{disparar}
@@ -227,11 +227,11 @@
         \tadAxioma{ubicacionLuegoDe(disparar, h, u)}{u}
         \tadAxioma{ubicacionLuegoDe(mirar(d), h, u)}{$\langle$pos(u), d$\rangle$}
         \tadAxioma{ubicacionLuegoDe(mover(d), h, u)}{
-            $\langle$(\IF esValida?(h, proxPosEnDir(d, pos(u))) $\yluego$ \\
+            $\langle$(\textbf{if} esValida?(h, proxPosEnDir(d, pos(u))) $\yluego$ \\
             $\neg$estaOcupada?(h, proxPosEnDir(d, pos(u))) \\
-            THEN proxPosEnDir(d, pos(u))
-            ELSE pos(u)
-            FI), d$\rangle$
+            \ \textbf{then} proxPosEnDir(d, pos(u)) \\
+            \ \textbf{else} pos(u) \\
+            \ \textbf{fi}), d$\rangle$
             }
         \tadAxioma{esMirar(mirar(d))}{true}
         \tadAxioma{esMirar(mover(d))}{false}
