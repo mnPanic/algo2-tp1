@@ -154,19 +154,23 @@
         ]
         % TODO: Alinear
         \tadAlinearAxiomas{ubicacionInicialFan(iniciar(pjs, as, u, h))}
-        %%% Observadores
+
+        % Observadores
+        % ------------
+
         % accionesPJs
         \tadAxioma{accionesPJs(iniciar(pjs, as, u, h))}{inicializarAcciones(pjs)}
-        \tadAxioma{accionesPJs(proxPaso(j, p, a))}
-            {\ifCustom
+        \tadAxioma{accionesPJs(proxPaso(j, p, a))}{
+            \ifCustom
                 {$\neg$ terminaRonda(j, p, a)}
                 {definir(p, obtener(p, accionesPJs(j)) \circulito a, accionesPJs(j))}
-                {inicializarAcciones(jugadores(j))}}
+                {inicializarAcciones(jugadores(j))}
+        }
         
         % accionesFan
         \tadAxioma{accionesFan(iniciar(pjs, as, u, h))}{definir(nombreSiguienteFan(j), as, vacio)}
-        \tadAxioma{accionesFan(proxPaso(j, p, a))}
-            {\ifCustom
+        \tadAxioma{accionesFan(proxPaso(j, p, a))}{
+            \ifCustom
                 {$\neg$ terminaRonda(j, p, a)}
                 {accionesFan(j)}
                 % Como termina la ronda luego de la acción de p,
@@ -177,7 +181,8 @@
                     accionesFan(j),
                     nombreSiguienteFan(j),
                     obtener(p, accionesPJs(j)) \circulito a
-                )}}
+                )}
+        }
         
         % hab
         \tadAxioma{hab(iniciar(pjs, as, u, h))}{h}
