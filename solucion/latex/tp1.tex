@@ -146,11 +146,15 @@
         \tadOperacion{generarAccionesFan}{juego/j, ubicacion/u, secu(accion)}{secu(accion)}{esValida?(hab(j), pos(u))}
         \tadOperacion{nombreSiguienteFan}{juego}{fantasma}{}
 
-    \tadAxiomas[
-            \paratodo{conj(pj)}{pjs}, 
-            \paratodo{pj}{p}, 
-            \paratodo{juego}{j},
-            \paratodo{hab}{h}
+    \tadAxiomas[\paratodo{pj}{p},\\
+            \paratodo{conj(pj)}{pjs},\\
+            \paratodo{fantasma}{f},\\
+            \paratodo{conj(fantasma)}{fs},\\
+            \paratodo{juego}{j},\\
+            \paratodo{hab}{h},\\
+            \paratodo{ubicacion}{u, uInicialPJ},\\
+            \paratodo{accion}{a},\\
+            \paratodo{secu(accion)}{as}
         ]
         % TODO: Alinear
         \tadAlinearAxiomas{ubicacionInicialFan(iniciar(pjs, as, u, h))}
@@ -190,32 +194,129 @@
 
         % vivePJ?
         \tadAxioma{vivePJ?(iniciar(pjs, as, u, h), p')}{true}
-        \tadAxioma{vivePJ?(proxPaso(j, p, a), p')}
+        \tadAxioma{vivePJ?(proxPaso(j, p, a), p')}{
             % Si con la acción de p termina la ronda, reviven todos
-            {terminaRonda?(j, p, a) $\lor$ \\
+            terminaRonda?(j, p, a) $\lor$ \\
              \ifCustom
                 {p = p'}
                 % Entonces por la reestricción de prox paso se que no estaba muerto en j.
                 {$\neg$ moriraPJ(j, fantasmas(j), p, a)}
                 {vivePJ?(j, p') $\yluego$
-                 $\neg$ moriraPJ(j, fantasmas(j), p, a)}}
+                 $\neg$ moriraPJ(j, fantasmas(j), p, a)}
+        }
 
         % viveFan?
         \tadAxioma{viveFan?(iniciar(pjs, as, u, h), f)}{true}
-        \tadAxioma{viveFan?(proxPaso(j, p, a), f)}
-            {terminaRonda?(j, p, a) $\lor$ \\
-             (viveFan?(j, f) $\yluego$ $\neg$ moriraFantasma(j, p, a, f))}
+        \tadAxioma{viveFan?(proxPaso(j, p, a), f)}{
+            terminaRonda?(j, p, a) $\lor$ \\
+             (viveFan?(j, f) $\yluego$ $\neg$ moriraFantasma(j, p, a, f))
+        }
         
         % ubicacionInicialFan
         \tadAxioma{ubicacionInicialFan(iniciar(pjs, as, u, h))}{u}
-        \tadAxioma{ubicacionInicialFan(proxPaso(j, p, a))}
+        \tadAxioma{ubicacionInicialFan(proxPaso(j, p, a))}{
             % si f no pertenece a los fantasmas del juego antes de efectuar el paso,
             % entonces es nuevo, y fue la acción de p la que finalizó la ronda,
             % así agregando un nuevo fantasma.
-            {\ifCustom
+            \ifCustom
                 {f $\in$ fantasmas(j)}
                 {ubicacionInicialFan(j, f)}
-                {ubicacionInicialPJ(j, p)}}
+                {ubicacionInicialPJ(j, p)}
+        }
+
+        % Otras operaciones
+        % -----------------
+
+        \tadAxioma{jugadores(j)}{claves(accionesPJs(j))}
+        \tadAxioma{fantasmas(j)}{claves(accionesFan(j))}
+
+        \tadAxioma{puntaje(j)}{ronda(j) - 1}
+        \tadAxioma{ronda(j)}{\#(fantasmas(j))}
+        \tadAxioma{paso(j)}{cantAcciones(j, jugadores(j))}
+
+        \tadAxioma{cantAcciones(j, pjs)}{
+            \ifCustom
+                {$\emptyset$?(pjs)}
+                {0}
+                {long(obtener(dameUno(pjs), accionesPJs(j))) +\\
+                 cantAcciones(j, sinUno(pjs))}
+        }
+        
+        \tadAxioma{termino?(j)}{$\neg$ estanVivos(j, jugadores(j))}
+        \tadAxioma{estanVivos(j, pjs)}{
+            \ifCustom
+                {$\emptyset$?(pjs)}
+                {true}
+                {vivePJ?(j, dameUno(pjs)) $\land$ \\
+                 estanVivos(j, sinUno(pjs))}
+        }
+
+        \tadAxioma{fantasmaEspecial(j)}{\#(claves(accionesFan(j)))}
+
+        \tadAxioma{ubicacionInicialPJ(j, p)}{obtener(p, localizarJugadores(j))}
+
+        \tadAxioma{ubicacionPJ(j, p)}{
+            deducirUbicacion(j, ubicacionInicialPJ(j, p), \\
+                             obtener(p, accionesPJs(j)))
+        }
+
+        \tadAxioma{ubicacionFan(j, f)}{
+            deducirUbicacion(j, ubicacionInicialFan(j, f), \\
+                             obtener(f, accionesFan(j)))
+        }
+            
+        \tadAxioma{deducirUbicacion(j, u, as)}{
+            \ifCustom
+                {vacia?(as)}
+                {u}
+                {deducirUbicacion(j, ubicacionLuegoDe(prim(as), hab(j), u), fin(as))}
+        }
+
+        \tadAxioma{agregarFantasma(j, uInicialPJ, \\accionesFantasmas, f, as)}{
+            definir(f, generarAccionesFantasma(j, uInicialPJ, as), \\
+                    accionesFantasmas)
+        }
+
+        \tadAxioma{generarAccionesFan(j, uInicialPJ, as)}{
+            as \\
+            \& (nada $\bullet$ nada $\bullet$ nada $\bullet$ nada $\bullet$ nada) \\
+            \& invertir(hab(j), uInicialPJ, as)
+        }
+
+        \tadAxioma{inicializarAcciones(pjs)}{
+            \ifCustom
+                {$\emptyset$?(pjs)}
+                {vacio}
+                {definir(dameUno(pjs), \secuencia{}, \\
+                         inicializarAcciones(sinUno(pjs)))}
+        }
+
+        \tadAxioma{terminaRonda(j, p, a)}{moriraFantasma(j, p, a, fantasmaEspecial(j))}
+        
+        \tadAxioma{moriraFantasma(j, p, a, f)}{
+            pos(ubicacionFan(j, f)) $\in$ \\
+            posicionesAfectadasPor(a, hab(j), ubicacionPJ(j, p))
+        }
+
+        \tadAxioma{moriraPJ(j, fs, p, a)}{
+            \ifCustom
+                {$\emptyset$?(fs)}
+                {false}
+                {(viveFan?(j, dameUno(fs)) $\yluego$ \\
+                 moriraPJPorFan(j, dameUno(fs), p, a)) $\lor$ \\
+                 moriraPJ(j, sinUno(fs), p, a)}
+        }
+
+        \tadAxioma{moriraPJPorFan(j, f, p, a)}{
+            $\neg$ moriraFantasma(j, p, a, f) $\land$ \\
+            (pos(ubicacionLuegoDe(a, hab(j), ubicacionPJ(j, p))) $\in$ \\
+             posicionesAfectadasPor(accionFan(j, f), hab(j), \\
+                                    ubicacionFan(j, f)))
+        }
+
+        \tadAxioma{accionFan(j, f)}{obtener(accionesFan(j), f)[paso(j) \% obtener(accionesFan(j), f)]}
+
+        \tadAxioma{nombreSiguienteFan}{\#(claves(accionesFan(j))) + 1}
 
 \end{tad}
 
