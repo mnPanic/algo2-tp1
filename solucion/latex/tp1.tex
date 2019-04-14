@@ -406,8 +406,8 @@
         \tadOperacion{nada}{}{accion}{}
 
     \tadOtrasOperaciones
-        \tadOperacion{ubicacionLuegoDe}{accion/a,hab/h,ubicacion/u}{conj(pos)}{esValida?(h, pos(u))}
-        \tadOperacion{posicionesAfectadasPor}{accion/a,hab/h,ubicacion/u}{conj(pos)}{esValida?(h, pos(u))}
+        \tadOperacion{ubicacionLuegoDe}{accion,hab/h,ubicacion/u}{conj(pos)}{esValida?(h, pos(u))}
+        \tadOperacion{posicionesAfectadasPor}{accion,hab/h,ubicacion/u}{conj(pos)}{esValida?(h, pos(u))}
         \tadOperacion{$\neg$ \argumento}{accion}{accion}{}
         \tadOperacion{invertir}{hab/h,ubicacion/u,secu(accion)}{secu(accion)}{esValida?(h, pos(u))}
 
