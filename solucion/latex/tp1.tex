@@ -103,6 +103,63 @@
 
 \end{tad}
 
+\section{TAD \tadNombre{Habitacion}}
+
+\begin{tad}{\tadNombre{Habitacion}}
+  \tadGeneros{hab}
+  \tadExporta{hab, observadores, generadores, esConexa?}
+  \tadUsa{\tadNombre{pos, bool, nat}}
+
+  \tadIgualdadObservacional{h}{h'}{hab}{$(\forall p:\text{pos})$(esValida?($p, h$) $\igobs$ esValida?($p, h'$) $\yluego$ \\ (esValida?($p, h$) $\impluego$ \\(estaOcupada?($p, h$) $\igobs$ estaOcupada?($p, h'$))))}
+  \tadAlinearFunciones{verificarAlcancePos}{hab,conj(pos),conj(pos)}
+
+
+  \tadObservadores
+    \tadOperacion{esValida?}{hab,pos}{bool}{} %Decisión tomada, tiene que ser de 2 o mas porque sino nadie muere.
+    \tadOperacion{estaOcupada?}{hab/h,pos/p}{bool}{esValida?(h, p)}
+
+  \tadGeneradores
+    \tadOperacion{nueva}{nat/n}{hab}{n>1}
+    \tadOperacion{ocupar}{hab/h,pos/p}{hab}{esValida?(h, p) \yluego $\neg$ estaOcupada?(h, p)}
+
+  \tadOtrasOperaciones
+    \tadOperacion{esConexa?}{hab}{bool}{}
+    \tadOperacion{tamano}{hab}{nat}{}
+    \tadOperacion{posiciones}{hab}{conj(pos)}{}
+    \tadOperacion{posicionesLibres}{hab/h,conj(pos)/ps}{conj(pos)}{ps $\subseteq$ posiciones(h)}
+    \tadOperacion{verificarAlcance}{hab/h,conj(pos)/ps}{bool}{ps $\subseteq$ posiciones(h)}
+    \tadOperacion{verificarAlcancePos}{hab/h,conj(pos)/ps,pos/p}{bool}{ps $\subseteq$ posiciones(h) $\land$ p $\in$ posiciones(h)}
+
+\tadAlinearFunciones{estaOcupada?(ocupar(h,p'),p)}{}
+
+  \tadAxiomas[\paratodo{hab}{h} \paratodo{conj(pos)}{ps} \paratodo{pos}{p} \paratodo{nat}{n,k,tam}]
+  \tadAlinearAxiomas{estaOcupada?(ocupar(h,p'),p)}
+    \tadAxioma{esValida?(nueva(n),p)}{0 $\leq$ $\Pi_1$(p) < \ n $\land$ 0 $\leq$ $\Pi_2$(p) < \ n}
+    
+    \tadAxioma{esValida?(ocupar(h,p'),p)}{p = p' \oluego \ esValida?(h, p)}
+    
+    \tadAxioma{estaOcupada?(nueva(n),p)}{false}
+    
+    \tadAxioma{estaOcupada?(ocupar(h,p'),p)}{p = p' $\lor$ estaOcupada?(h, p)}
+    
+    \tadAxioma{tamano(nueva(n))}{n}
+    
+    \tadAxioma{tamano(ocupar(h, p))}{tamano(h)}
+    
+    \tadAxioma{esConexa?(h)}{verificarAlcance(h, posicionesLibres(posiciones(h)))}
+
+   \tadAxioma{posicionesLibres(h, ps)}{\textbf{if} \ $\emptyset?(ps)$ \\ \textbf{then} \ $\emptyset$ \\ \textbf{else} \\ (\textbf{if} estaOcupada?(h, dameUno(ps)) \textbf{then} \ $\emptyset$ \textbf{else} \{dameUno(ps)\} \textbf{fi}) \\ $\cup$ posicionesLibres(h, sinUno(ps)) \\ \textbf{fi}}
+
+    \tadAxioma{verificarAlcance(h, ps)}{\textbf{if} \ $\emptyset?(ps)$ \\ \textbf{then} \ true \\ \textbf{else} \\ verificarAlancePos(h, ps, dameUno(ps)) $\land$ verificarAlcance(h, p) \\ \textbf{fi}}
+    
+    \tadAxioma{verificarAlcancePos(h, ps, p)}{\textbf{if} \ $\emptyset?(ps)$ \\ \textbf{then} \ true \\ \textbf{else} \\ esAlcanzable(h, p, dameUno(ps)) $\land$ verificarAlcancePos(h, p, sinUno(ps)) \\ \textbf{fi}}
+
+    \tadAxioma{posiciones(h)}{darPosiciones(h, tamano(h) - 1, tamano(h) - 1, tamano(h) - 1)}
+
+    \tadAxioma{darPosiciones(h, n, k, tam)}{\textbf{if} \ $n = 0? \land k = 0?$ \\ \textbf{then} \ $\emptyset$ \\ \textbf{else if} $k = 0?$ \\ \textbf{then} \ Ag((n,k), darPosiciones(h, n - 1, tam, tam)) \\ \textbf{else} \ Ag((n,k), darPosiciones(h, n, k - 1, tam))  \\ \textbf{fi} \\ \textbf{fi}}
+
+\end{tad}
+
 \section{TAD \tadNombre{Accion}}
 \begin{tad}{\tadNombre{Accion}}
     \tadGeneros{accion}
