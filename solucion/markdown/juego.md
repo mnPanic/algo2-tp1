@@ -239,7 +239,7 @@ moriraFantasma(j, p, a, f) ==
 moriraPJ(j, fs, p, a) ==
     if ø?(fs)
     then false
-    else (viveFan?(j, f) ^L moriraPJPorFantasma(j, dameUno(fs), p, a) v
+    else (viveFan?(j, dameUno(fs)) ^L moriraPJPorFantasma(j, dameUno(fs), p, a) v
           moriraPJ(j, sinUno(fs), p, a))
     fi
 
