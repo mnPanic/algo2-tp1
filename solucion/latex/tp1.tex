@@ -196,4 +196,61 @@
         \tadAxioma{direccion(mover(d))}{d}
 \end{tad}
 
+\section{TAD \tadNombre{Direccion}}
+\begin{tad}{\tadNombre{Direccion}}
+    \tadGeneros{direccion}
+    \tadExporta{observadores, generadores, otras operaciones}
+    \tadIgualdadObservacional{d}{d'}{direccion}{
+        esArriba(d) $\igobs$ esArriba(d') $\land$ \\
+        esAbajo(d) $\igobs$ esAbajo(d') $\land$ \\
+        esIzquierda(d) $\igobs$ esIzquierda(d') $\land$ \\ 
+        esDerecha(d) $\igobs$ esDerecha(d')
+    }
+    \tadAlinearFunciones{proxPosEnDir}{direccion, posicion}{}
+    \tadObservadores
+        \tadOperacion{esArriba}{direccion}{bool}{}
+        \tadOperacion{esAbajo}{direccion}{bool}{}
+        \tadOperacion{esIzquierda}{direccion}{bool}{}
+        \tadOperacion{esDerecha}{direccion}{bool}{}
+
+    \tadGeneradores
+        \tadOperacion{arriba}{}{direccion}{}
+        \tadOperacion{abajo}{}{direccion}{}
+        \tadOperacion{izquierda}{}{direccion}{}
+        \tadOperacion{derecha}{}{direccion}{}
+    
+    \tadOtrasOperaciones
+        \tadOperacion{opuesta}{direccion}{direccion}{}
+        \tadOperacion{proxPosEnDir}{direccion, posicion}{posicion}{}
+
+    \tadAlinearAxiomas{proxPosEnDir(izquierda, p)}
+    \tadAxiomas
+        \tadAxioma{opuesta(arriba)}{abajo}
+        \tadAxioma{opuesta(abajo)}{arriba}
+        \tadAxioma{opuesta(izquierda)}{derecha}
+        \tadAxioma{opuesta(derecha)}{izquierda}
+        \tadAxioma{proxPosEnDir(arriba, p)}{$\langle \Pi_1$(p), $\Pi_2$(p) + 1$\rangle$}
+        \tadAxioma{proxPosEnDir(abajo, p)}{$\langle \Pi_1$(p), $\Pi_2$(p) - 1$\rangle$}
+        \tadAxioma{proxPosEnDir(izquierda, p)}{$\langle\Pi_1$(p) - 1, $\Pi_2$(p)$\rangle$}
+        \tadAxioma{proxPosEnDir(derecha, p)}{$\langle \Pi_1$(p) + 1, $\Pi_2$(p)$\rangle$}
+        \tadAxioma{esArriba(arriba)}{true}
+        \tadAxioma{esArriba(abajo)}{false}
+        \tadAxioma{esArriba(izquierda)}{false}
+        \tadAxioma{esArriba(derecha)}{false}
+        \tadAxioma{esAbajo(arriba)}{false}
+        \tadAxioma{esAbajo(abajo)}{true}
+        \tadAxioma{esAbajo(izquierda)}{false}
+        \tadAxioma{esAbajo(derecha)}{false}
+        \tadAxioma{esIzquierda(arriba)}{false}
+        \tadAxioma{esIzquierda(abajo)}{false}
+        \tadAxioma{esIzquierda(izquierda)}{true}
+        \tadAxioma{esIzquierda(derecha)}{false}
+        \tadAxioma{esDerecha(arriba)}{false}
+        \tadAxioma{esDerecha(abajo)}{false}
+        \tadAxioma{esDerecha(izquierda)}{false}
+        \tadAxioma{esDerecha(derecha)}{true}
+
+    
+\end{tad}{}
+
 \end{document}
