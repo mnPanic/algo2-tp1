@@ -136,6 +136,7 @@
         \tadOperacion{moriraPJPorFan}{juego/j, fantasma/f, pj/p, accion}{bool}
             {p $\in$ jugadores(j) $\land$ \\
              f $\in$ fantasmas(j) $\yluego$ \\
+             vivePJ?(j, p) $\land$ \\
              viveFan?(j, f)}
         \tadOperacion{accionFan}{juego/j, fantasma/f}{accion}{f $\in$ fantasmas(j) $\yluego$ \\ viveFan?(j, f)}
         \tadOperacion{inicializarAcciones}{conj(pj)}{dicc(pj, secu(accion))}{}
@@ -303,7 +304,7 @@
                 {$\emptyset$?(fs)}
                 {false}
                 {(viveFan?(j, dameUno(fs)) $\yluego$ \\
-                 moriraPJPorFan(j, dameUno(fs), p, a)) $\lor$ \\
+                 moriraPJPorFan(j, dameUno(fs), p, a)) $\oluego$ \\
                  moriraPJ(j, sinUno(fs), p, a)}
         }
 
