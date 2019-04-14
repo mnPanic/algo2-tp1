@@ -13,7 +13,8 @@
 
 \newcommand{\f}[1]{\text{#1}}
 \renewcommand{\paratodo}[2]{$\forall~#2$: #1}
-
+\newcommand{\ifCustom}[3]{\textbf{if} #1 \\ \textbf{then} #2 \\ \textbf{else} #3 \\ \textbf{fi}}
+\newcommand{\ifInline}[3]{\textbf{if} #1 \textbf{then} #2 \textbf{else} #3 \textbf{fi}}
 \sloppy
 
 \hypersetup{%
@@ -140,9 +141,72 @@
             {esValida?(hab(j), pos(u))}
         \tadOperacion{generarAccionesFan}{juego/j, ubicacion/u, secu(accion)}{secu(accion)}{esValida?(hab(j), pos(u))}
         \tadOperacion{nombreSiguienteFan}{juego}{fantasma}{}
-    \tadAxiomas[\paratodo{nat}{n, m}]
-    \tadAlinearAxiomas{pred(suc($n$))}
-    \tadAxioma{$0=0?$}{true}
+
+    \tadAxiomas[
+            \paratodo{conj(pj)}{pjs}, 
+            \paratodo{pj}{p}, 
+            \paratodo{juego}{j},
+            \paratodo{hab}{h}
+        ]
+        % TODO: Alinear
+        \tadAlinearAxiomas{ubicacionInicialFan(iniciar(pjs, as, u, h))}
+        %%% Observadores
+        % accionesPJs
+        \tadAxioma{accionesPJs(iniciar(pjs, as, u, h))}{inicializarAcciones(pjs)}
+        \tadAxioma{accionesPJs(proxPaso(j, p, a))}
+            {\ifCustom
+                {$\neg$ terminaRonda(j, p, a)}
+                {definir(p, obtener(p, accionesPJs(j)) \circulito a, accionesPJs(j))}
+                {inicializarAcciones(jugadores(j))}}
+        
+        % accionesFan
+        \tadAxioma{accionesFan(iniciar(pjs, as, u, h))}{definir(nombreSiguienteFan(j), as, vacio)}
+        \tadAxioma{accionesFan(proxPaso(j, p, a))}
+            {\ifCustom
+                {$\neg$ terminaRonda(j, p, a)}
+                {accionesFan(j)}
+                % Como termina la ronda luego de la acción de p,
+                % p mató al fantasma especial
+                % Le agrego las acciones de p al nuevo fantasma.
+                {agregarFantasma(j,
+                    ubicacionInicialPJ(j, p),
+                    accionesFan(j),
+                    nombreSiguienteFan(j),
+                    obtener(p, accionesPJs(j)) \circulito a
+                )}}
+        
+        % hab
+        \tadAxioma{hab(iniciar(pjs, as, u, h))}{h}
+        \tadAxioma{hab(proxPaso(j, p, a))}{hab(j)}
+
+        % vivePJ?
+        \tadAxioma{vivePJ?(iniciar(pjs, as, u, h), p')}{true}
+        \tadAxioma{vivePJ?(proxPaso(j, p, a), p')}
+            % Si con la acción de p termina la ronda, reviven todos
+            {terminaRonda?(j, p, a) $\lor$ \\
+             \ifCustom
+                {p = p'}
+                % Entonces por la reestricción de prox paso se que no estaba muerto en j.
+                {$\neg$ moriraPJ(j, fantasmas(j), p, a)}
+                {vivePJ?(j, p') $\land$ % TODO, yluego
+                 $\neg$ moriraPJ(j, fantasmas(j), p, a)}}
+
+        % viveFan?
+        \tadAxioma{viveFan?(iniciar(pjs, as, u, h), f)}{true}
+        \tadAxioma{viveFan?(proxPaso(j, p, a), f)}
+            {terminaRonda?(j, p, a) $\lor$ \\
+             (viveFan?(j, f) $\land$ $\neg$ moriraFantasma(j, p, a, f))} % TODO: yluego
+        
+        % ubicacionInicialFan
+        \tadAxioma{ubicacionInicialFan(iniciar(pjs, as, u, h))}{u}
+        \tadAxioma{ubicacionInicialFan(proxPaso(j, p, a))}
+            % si f no pertenece a los fantasmas del juego antes de efectuar el paso,
+            % entonces es nuevo, y fue la acción de p la que finalizó la ronda,
+            % así agregando un nuevo fantasma.
+            {\ifCustom
+                {f $\in$ fantasmas(j)}
+                {ubicacionInicialFan(j, f)}
+                {ubicacionInicialPJ(j, p)}}
 
 \end{tad}
 
