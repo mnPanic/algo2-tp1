@@ -21,6 +21,11 @@ caratula
 
 ./tex/latex/aed2-diseno:
 aed2-diseno.sty
+ejemplo
+
+./tex/latex/aed2-diseno/ejemplo:
+ejemplo_modulo.pdf
+ejemplo_modulo.tex
 
 ./tex/latex/aed2-itef:
 aed2-itef.sty

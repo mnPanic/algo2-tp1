@@ -103,4 +103,36 @@
 
 \end{tad}
 
+\begin{tad}{\tadNombre{Accion}}
+    \tadGeneros{accion}
+    
+    \tadExporta{observadores, generadores, genero, otras operaciones}
+
+    \tadIgualdadObservacional{a}{a'}{accion}{
+        esNada(a) $\igobs$ esNada(a') $\land$ \\
+        esDisparar(a) $\igobs$ esDisparar(a') $\land$ \\
+        esMover(a) $\igobs$ esMover(a') $\land$ \\
+        esMirar(a) $\igobs$ esMirar(a') $\land$ \\
+        ((esMover(a) $\lor$ esMirar(a)) $\impluego$ direccion(a) $\igobs$ direccion(a'))
+    }
+
+    \tadAlinearFunciones{posicionesAfectadasPor}{hab/h,ubicacion/u,secu(accion)}{secu(accion)}{}
+    
+    \tadObservadores
+        \tadOperacion{esMover}{accion}{bool}{}
+        \tadOperacion{esMirar}{accion}{bool}{}
+        \tadOperacion{esDisparar}{accion}{bool}{}
+        \tadOperacion{esNada}{accion}{bool}{}
+        \tadOperacion{direccion}{accion/a}{direccion}{esMirar(a) $\lor$ esMover(a)}
+
+    \tadOtrasOperaciones
+        \tadOperacion{ubicacionLuegoDe}{accion/a,hab/h,ubicacion/u}{conj(pos)}{esValida?(h, pos(u))}
+        \tadOperacion{posicionesAfectadasPor}{accion/a,hab/h,ubicacion/u}{conj(pos)}{esValida?(h, pos(u))}
+        \tadOperacion{$\neg$ \argumento}{accion}{accion}{}
+        \tadOperacion{invertir}{hab/h,ubicacion/u,secu(accion)}{secu(accion)}{esValida?(h, pos(u))}
+
+    
+
+\end{tad}
+
 \end{document}
