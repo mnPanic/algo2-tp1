@@ -417,18 +417,21 @@
         \tadAxioma{posicionesAfectadasPor(mirar(d), h, u)}{$\emptyset$}
         \tadAxioma{posicionesAfectadasPor(nada, h, u)}{$\emptyset$}
         \tadAxioma{posicionesAfectadasPor(disparar, h, u)}{
-            \textbf{if} esValida?(h, proxPosEnDir(dir(u), pos(u)) $\yluego$ \\
-            $\neg$estaOcupada?(h, proxPosEnDir(dir(u), pos(u))) \\
-            \textbf{then} \\ Ag(proxPosEnDir(dir(u), pos(u)),posicionesAfectadasPor(disparar,h, $\langle$proxPosEnDir(dir(u), pos(u)), dir(u)$\rangle$)) \\
-            \textbf{else} $\emptyset$ \\
-            \textbf{fi}}
+            \ifCustom
+            {esValida?(h, proxPosEnDir(dir(u), pos(u)) $\yluego$ \\
+             $\neg$ estaOcupada?(h, proxPosEnDir(dir(u), pos(u)))}
+            {Ag(proxPosEnDir(dir(u), pos(u)), \\
+                posicionesAfectadasPor(disparar, h, \\$\langle$proxPosEnDir(dir(u), pos(u)), dir(u)$\rangle$))}
+            {$\emptyset$}
+        }
 
         \tadAxioma{invertir(h, u, as)}{
-            \textbf{if} vacia?(as) \\
-            \textbf{then} $<>$ \\ 
-            \textbf{else} \\ 
-            invertir(h, ubicacionLuegoDe(prim(as), h, u), fin(as)) $\lor$ $\neg$(prim(as), h, u) \\
-            \textbf{fi}
+            \ifCustom
+                {vacia?(as}
+                {\secuencia{}}
+                {\\
+                 invertir(h, ubicacionLuegoDe(prim(as), h, u), fin(as)) \circulito \\
+                 $\neg$(prim(as), h, u)}
         }
         \tadAxioma{$\neg$(mover(d), h, u)}{
             \textbf{if} pos(ubicacionLuegoDe(mover(d), h, u)) = pos(u) \\
