@@ -126,13 +126,17 @@
         \tadOperacion{deducirUbicacion}{juego/j, ubicacion/u, acciones}{ubicacion}{esValida?(hab(j), pos(u))}
         \tadOperacion{moriraFantasma}{juego/j, pj/p, accion, fantasma/f}{bool}
             {p $\in$ jugadores(j) $\land$ \\
-             f $\in$ fantasmas(j)}
+             f $\in$ fantasmas(j) $\yluego$ \\
+             viveFan?(j, f) $\land$ \\
+             vivePJ?(j, p)}
         \tadOperacion{moriraPJ}{juego/j, conj(fantasma)/fs, pj/p, accion}{bool}
             {p $\in$ jugadores(j) $\land$ \\
-             fs $\subseteq$ fantasmas(j)}
-        \tadOperacion{moriraPJPorFan}{juego/j, fantasma/g, pj/p, accion}{bool}
+             fs $\subseteq$ fantasmas(j) $\yluego$ \\
+             vivePJ?(j, p)}
+        \tadOperacion{moriraPJPorFan}{juego/j, fantasma/f, pj/p, accion}{bool}
             {p $\in$ jugadores(j) $\land$ \\
-             f $\in$ fantasmas(j)}
+             f $\in$ fantasmas(j) $\yluego$ \\
+             viveFan?(j, f)}
         \tadOperacion{accionFan}{juego/j, fantasma/f}{accion}{f $\in$ fantasmas(j) $\yluego$ \\ viveFan?(j, f)}
         \tadOperacion{inicializarAcciones}{conj(pj)}{dicc(pj, secu(accion))}{}
         \tadOperacion{agregarFantasma}
@@ -188,14 +192,14 @@
                 {p = p'}
                 % Entonces por la reestricción de prox paso se que no estaba muerto en j.
                 {$\neg$ moriraPJ(j, fantasmas(j), p, a)}
-                {vivePJ?(j, p') $\land$ % TODO, yluego
+                {vivePJ?(j, p') $\yluego$
                  $\neg$ moriraPJ(j, fantasmas(j), p, a)}}
 
         % viveFan?
         \tadAxioma{viveFan?(iniciar(pjs, as, u, h), f)}{true}
         \tadAxioma{viveFan?(proxPaso(j, p, a), f)}
             {terminaRonda?(j, p, a) $\lor$ \\
-             (viveFan?(j, f) $\land$ $\neg$ moriraFantasma(j, p, a, f))} % TODO: yluego
+             (viveFan?(j, f) $\yluego$ $\neg$ moriraFantasma(j, p, a, f))}
         
         % ubicacionInicialFan
         \tadAxioma{ubicacionInicialFan(iniciar(pjs, as, u, h))}{u}
