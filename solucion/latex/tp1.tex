@@ -74,7 +74,7 @@
     }
 
     
-    \tadAlinearFunciones{ubicacionInicialFan}{juego/j, fantasma/f}
+    \tadAlinearFunciones{ubicacionInicialFan}{conj(pj)/pjs, secu(accion)/as}
 
     \tadObservadores
         \tadOperacion{accionesPJs}{juego}{dicc(pj, secu(accion))}{}
@@ -86,7 +86,15 @@
         \tadOperacion{localizarJugadores}{juego}{dicc(pj, ubicacion)}{}
     
     \tadGeneradores
+        \tadOperacion{iniciar}
+            {conj(pj)/pjs, secu(accion)/as, ubicacion/u, hab/h}
+            {juego}
+            {esConexa?(h) $\land$ $\neg$ $\emptyset$?(as) $\land$ $\neg$ $\emptyset$?(pjs) $\land$ esValida?(h, pos(u))}
 
+        \tadOperacion{proxPaso}
+            {juego/j, pj/p, accion/a}
+            {juego}
+            {p $\in$ jugadores(j) $\yluego$ vivePJ?(j, p) $\land$ $\neg$ termino?(j) $\land$ $\neg$ esMirar(a)}
     \tadOtrasOperaciones
 
     \tadAxiomas[\paratodo{nat}{n, m}]
