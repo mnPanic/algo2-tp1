@@ -15,6 +15,7 @@
 \renewcommand{\paratodo}[2]{$\forall~#2$: #1}
 \newcommand{\ifCustom}[3]{\textbf{if} #1 \\ \textbf{then} #2 \\ \textbf{else} #3 \\ \textbf{fi}}
 \newcommand{\ifInline}[3]{\textbf{if} #1 \textbf{then} #2 \textbf{else} #3 \textbf{fi}}
+\newcommand{\tupla}[1]{$\langle$ #1 $\rangle$}
 \sloppy
 
 \hypersetup{%
@@ -421,7 +422,8 @@
             {esValida?(h, proxPosEnDir(dir(u), pos(u)) $\yluego$ \\
              $\neg$ estaOcupada?(h, proxPosEnDir(dir(u), pos(u)))}
             {Ag(proxPosEnDir(dir(u), pos(u)), \\
-                posicionesAfectadasPor(disparar, h, \\$\langle$proxPosEnDir(dir(u), pos(u)), dir(u)$\rangle$))}
+                posicionesAfectadasPor(disparar, h, \\
+                                      \tupla{proxPosEnDir(dir(u), pos(u)), dir(u)}))}
             {$\emptyset$}
         }
 
@@ -444,30 +446,33 @@
         \tadAxioma{$\neg$(nada, h, u)}{nada}
         \tadAxioma{ubicacionLuegoDe(nada, h, u)}{u}
         \tadAxioma{ubicacionLuegoDe(disparar, h, u)}{u}
-        \tadAxioma{ubicacionLuegoDe(mirar(d), h, u)}{$\langle$pos(u), d$\rangle$}
+        \tadAxioma{ubicacionLuegoDe(mirar(d), h, u)}{\tupla{pos(u), d}}
         \tadAxioma{ubicacionLuegoDe(mover(d), h, u)}{
-            $\langle$(\textbf{if} esValida?(h, proxPosEnDir(d, pos(u))) $\yluego$ \\
-            $\neg$estaOcupada?(h, proxPosEnDir(d, pos(u))) \\
-            \ \textbf{then} proxPosEnDir(d, pos(u)) \\
-            \ \textbf{else} pos(u) \\
-            \ \textbf{fi}), d$\rangle$
+            \tupla{
+                (\ifCustom
+                    {esValida?(h, proxPosEnDir(d, pos(u))) $\yluego$ \\
+                     $\neg$estaOcupada?(h, proxPosEnDir(d, pos(u)))}
+                    {proxPosEnDir(d, pos(u))}
+                    {pos(u)}), 
+                d
             }
-        \tadAxioma{esMirar(mirar(d))}{true}
+        }
+        \tadAxioma{esMirar(mirar(d))}{\textbf{true}}
         \tadAxioma{esMirar(mover(d))}{false}
         \tadAxioma{esMirar(disparar)}{false}
         \tadAxioma{esMirar(nada)}{false}
         \tadAxioma{esMover(mirar(d))}{false}
-        \tadAxioma{esMover(mover(d))}{true}
+        \tadAxioma{esMover(mover(d))}{\textbf{true}}
         \tadAxioma{esMover(disparar)}{false}
         \tadAxioma{esMover(nada)}{false}
         \tadAxioma{esDisparar(mirar(d))}{false}
         \tadAxioma{esDisparar(mover(d))}{false}
-        \tadAxioma{esDisparar(disparar)}{true}
+        \tadAxioma{esDisparar(disparar)}{\textbf{true}}
         \tadAxioma{esDisparar(nada)}{false}
         \tadAxioma{esNada(mirar(d))}{false}
         \tadAxioma{esNada(mover(d))}{false}
         \tadAxioma{esNada(disparar)}{false}
-        \tadAxioma{esNada(nada)}{true}
+        \tadAxioma{esNada(nada)}{\textbf{true}}
         \tadAxioma{direccion(mirar(d))}{d}
         \tadAxioma{direccion(mover(d))}{d}
 \end{tad}
