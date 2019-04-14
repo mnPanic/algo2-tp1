@@ -125,14 +125,74 @@
         \tadOperacion{esNada}{accion}{bool}{}
         \tadOperacion{direccion}{accion/a}{direccion}{esMirar(a) $\lor$ esMover(a)}
 
+    \tadGeneradores
+        \tadOperacion{mover}{direccion}{accion}{}
+        \tadOperacion{mirar}{direccion}{accion}{}
+        \tadOperacion{disparar}{}{accion}{}
+        \tadOperacion{nada}{}{accion}{}
+
     \tadOtrasOperaciones
         \tadOperacion{ubicacionLuegoDe}{accion/a,hab/h,ubicacion/u}{conj(pos)}{esValida?(h, pos(u))}
         \tadOperacion{posicionesAfectadasPor}{accion/a,hab/h,ubicacion/u}{conj(pos)}{esValida?(h, pos(u))}
         \tadOperacion{$\neg$ \argumento}{accion}{accion}{}
         \tadOperacion{invertir}{hab/h,ubicacion/u,secu(accion)}{secu(accion)}{esValida?(h, pos(u))}
 
-    
-
+    \tadAlinearAxiomas{posicionesAfectadasPor(mover(d), h, u)}
+    \tadAxiomas[\paratodo{nat}{n, m}, \paratodo{ubicacion}{u}, \paratodo{habitacion}{a}]
+        \tadAxioma{posicionesAfectadasPor(mover(d), h, u)}{$\emptyset$}
+        \tadAxioma{posicionesAfectadasPor(mirar(d), h, u)}{$\emptyset$}
+        \tadAxioma{posicionesAfectadasPor(nada, h, u)}{$\emptyset$}
+        \tadAxioma{posicionesAfectadasPor(disparar, h, u)}{
+            \IF esValida?(h, proxPosEnDir(dir(u), pos(u)) $\yluego$ \\
+            $\neg$estaOcupada?(h, proxPosEnDir(dir(u), pos(u))) \\
+            THEN Ag(proxPosEnDir(dir(u), pos(u)), \\ 
+            posicionesAfectadasPor(disparar,h, \\
+            $\langle$proxPosEnDir(dir(u), pos(u)), dir(u)$\rangle$)) \\
+            ELSE $\emptyset$ 
+            FI}
+        \tadAxioma{invertir(h, u, as)}{
+            \IF vacia?(as) 
+            THEN $<>$ 
+            ELSE invertir(h, ubicacionLuegoDe(prim(as), h, u), fin(as)) $\lor$  $\neg$(prim(as), h, u)
+            FI
+        }
+        \tadAxioma{$\neg$(mover(d), h, u)}{
+            \IF pos(ubicacionLuegoDe(mover(d), h, u)) = pos(u) \\
+            THEN mirar(opuesta(d))
+            ELSE mover(opuesta(d))
+            FI
+        }
+        \tadAxioma{$\neg$(mirar(d), h, u)}{mirar(opuesta(d))}
+        \tadAxioma{$\neg$(disparar, h, u)}{disparar}
+        \tadAxioma{$\neg$(nada, h, u)}{nada}
+        \tadAxioma{ubicacionLuegoDe(nada, h, u)}{u}
+        \tadAxioma{ubicacionLuegoDe(disparar, h, u)}{u}
+        \tadAxioma{ubicacionLuegoDe(mirar(d), h, u)}{$\langle$pos(u), d$\rangle$}
+        \tadAxioma{ubicacionLuegoDe(mover(d), h, u)}{
+            $\langle$(\IF esValida?(h, proxPosEnDir(d, pos(u))) $\yluego$ \\
+            $\neg$estaOcupada?(h, proxPosEnDir(d, pos(u))) \\
+            THEN proxPosEnDir(d, pos(u))
+            ELSE pos(u)
+            FI), d$\rangle$
+            }
+        \tadAxioma{esMirar(mirar(d))}{true}
+        \tadAxioma{esMirar(mover(d))}{false}
+        \tadAxioma{esMirar(disparar)}{false}
+        \tadAxioma{esMirar(nada)}{false}
+        \tadAxioma{esMover(mirar(d))}{false}
+        \tadAxioma{esMover(mover(d))}{true}
+        \tadAxioma{esMover(disparar)}{false}
+        \tadAxioma{esMover(nada)}{false}
+        \tadAxioma{esDisparar(mirar(d))}{false}
+        \tadAxioma{esDisparar(mover(d))}{false}
+        \tadAxioma{esDisparar(disparar)}{true}
+        \tadAxioma{esDisparar(nada)}{false}
+        \tadAxioma{esNada(mirar(d))}{false}
+        \tadAxioma{esNada(mover(d))}{false}
+        \tadAxioma{esNada(disparar)}{false}
+        \tadAxioma{esNada(nada)}{true}
+        \tadAxioma{direccion(mirar(d))}{d}
+        \tadAxioma{direccion(mover(d))}{d}
 \end{tad}
 
 \end{document}
