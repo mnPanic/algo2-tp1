@@ -510,26 +510,26 @@
         \tadAxioma{opuesta(abajo)}{arriba}
         \tadAxioma{opuesta(izquierda)}{derecha}
         \tadAxioma{opuesta(derecha)}{izquierda}
-        \tadAxioma{proxPosEnDir(arriba, p)}{$\langle \Pi_1$(p), $\Pi_2$(p) + 1$\rangle$}
-        \tadAxioma{proxPosEnDir(abajo, p)}{$\langle \Pi_1$(p), $\Pi_2$(p) - 1$\rangle$}
-        \tadAxioma{proxPosEnDir(izquierda, p)}{$\langle\Pi_1$(p) - 1, $\Pi_2$(p)$\rangle$}
-        \tadAxioma{proxPosEnDir(derecha, p)}{$\langle \Pi_1$(p) + 1, $\Pi_2$(p)$\rangle$}
-        \tadAxioma{esArriba(arriba)}{true}
+        \tadAxioma{proxPosEnDir(arriba, p)}{\tupla{$\Pi_1$(p), $\Pi_2$(p) + 1}}
+        \tadAxioma{proxPosEnDir(abajo, p)}{\tupla{$\Pi_1$(p), $\Pi_2$(p) - 1}}
+        \tadAxioma{proxPosEnDir(izquierda, p)}{\tupla{$\Pi_1$(p) - 1, $\Pi_2$(p)}}
+        \tadAxioma{proxPosEnDir(derecha, p)}{\tupla{$\Pi_1$(p) + 1, $\Pi_2$(p}}
+        \tadAxioma{esArriba(arriba)}{\textbf{true}}
         \tadAxioma{esArriba(abajo)}{false}
         \tadAxioma{esArriba(izquierda)}{false}
         \tadAxioma{esArriba(derecha)}{false}
         \tadAxioma{esAbajo(arriba)}{false}
-        \tadAxioma{esAbajo(abajo)}{true}
+        \tadAxioma{esAbajo(abajo)}{\textbf{true}}
         \tadAxioma{esAbajo(izquierda)}{false}
         \tadAxioma{esAbajo(derecha)}{false}
         \tadAxioma{esIzquierda(arriba)}{false}
         \tadAxioma{esIzquierda(abajo)}{false}
-        \tadAxioma{esIzquierda(izquierda)}{true}
+        \tadAxioma{esIzquierda(izquierda)}{\textbf{true}}
         \tadAxioma{esIzquierda(derecha)}{false}
         \tadAxioma{esDerecha(arriba)}{false}
         \tadAxioma{esDerecha(abajo)}{false}
         \tadAxioma{esDerecha(izquierda)}{false}
-        \tadAxioma{esDerecha(derecha)}{true}
+        \tadAxioma{esDerecha(derecha)}{\textbf{true}}
 
     
 \end{tad}{}
