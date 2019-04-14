@@ -81,7 +81,7 @@
     }
 
     
-    \tadAlinearFunciones{ubicacionInicialFan}{conj(pj)/pjs, secu(accion)/as}
+    \tadAlinearFunciones{nombreSiguienteFan}{conj(pj)/pjs, secu(accion)/as, ubicacion/u}
 
     \tadObservadores
         \tadOperacion{accionesPJs}{juego}{dicc(pj, secu(accion))}{}
@@ -96,14 +96,50 @@
         \tadOperacion{iniciar}
             {conj(pj)/pjs, secu(accion)/as, ubicacion/u, hab/h}
             {juego}
-            {esConexa?(h) $\land$ $\neg$ $\emptyset$?(as) $\land$ $\neg$ $\emptyset$?(pjs) $\land$ esValida?(h, pos(u))}
+            {esConexa?(h) $\land$ \\
+             $\neg$ $\emptyset$?(as) $\land$ \\
+             $\neg$ $\emptyset$?(pjs) $\land$ \\
+             esValida?(h, pos(u))}
 
         \tadOperacion{proxPaso}
             {juego/j, pj/p, accion/a}
             {juego}
-            {p $\in$ jugadores(j) $\yluego$ vivePJ?(j, p) $\land$ $\neg$ termino?(j) $\land$ $\neg$ esMirar(a)}
+            {p $\in$ jugadores(j) $\yluego$ \\
+             vivePJ?(j, p) $\land$ \\
+             $\neg$ termino?(j) $\land$ \\
+             $\neg$ esMirar(a)}
     \tadOtrasOperaciones
-
+        \tadOperacion{jugadores}{juego}{conj(pj)}{}
+        \tadOperacion{fantasmas}{juego}{conj(fantasma)}{}
+        \tadOperacion{puntaje}{juego}{nat}{}
+        \tadOperacion{ronda}{juego}{nat}{}
+        \tadOperacion{paso}{juego}{nat}{}
+        \tadOperacion{cantAcciones}{juego, conj(pj)}{nat}{}
+        \tadOperacion{terminaRonda}{juego/j, pj/p, accion}{bool}{p $\in$ jugadores(j)}
+        \tadOperacion{fantasmaEspecial}{juego}{fantasma}{}
+        \tadOperacion{termino?}{juego}{bool}{}
+        \tadOperacion{estanVivos}{juego/, conj(pj)/pjs}{bool}{pjs $\subseteq$ jugadores(j)}
+        \tadOperacion{ubicacionInicialPJ}{juego/j, pj/p}{ubicacion}{p $\in$ jugadores(j)}
+        \tadOperacion{ubicacionPJ}{juego/j, pj/p}{ubicacion}{p $\in$ jugadores(j)}
+        \tadOperacion{ubicacionFan}{juego/j, fantamsa/f}{ubicacion}{f $\in$ fantasmas(j)}
+        \tadOperacion{deducirUbicacion}{juego/j, ubicacion/u, acciones}{ubicacion}{esValida?(hab(j), pos(u))}
+        \tadOperacion{moriraFantasma}{juego/j, pj/p, accion, fantasma/f}{bool}
+            {p $\in$ jugadores(j) $\land$ \\
+             f $\in$ fantasmas(j)}
+        \tadOperacion{moriraPJ}{juego/j, conj(fantasma)/fs, pj/p, accion}{bool}
+            {p $\in$ jugadores(j) $\land$ \\
+             fs $\subseteq$ fantasmas(j)}
+        \tadOperacion{moriraPJPorFan}{juego/j, fantasma/g, pj/p, accion}{bool}
+            {p $\in$ jugadores(j) $\land$ \\
+             f $\in$ fantasmas(j)}
+        \tadOperacion{accionFan}{juego/j, fantasma/f}{accion}{f $\in$ fantasmas(j) $\yluego$ \\ viveFan?(j, f)}
+        \tadOperacion{inicializarAcciones}{conj(pj)}{dicc(pj, secu(accion))}{}
+        \tadOperacion{agregarFantasma}
+            {juego/j, ubicacion/u, dicc(fantasma, secu(accion)), fantasma, secu(accion)}
+            {dicc(fantasma, secu(accion))}
+            {esValida?(hab(j), pos(u))}
+        \tadOperacion{generarAccionesFan}{juego/j, ubicacion/u, secu(accion)}{secu(accion)}{esValida?(hab(j), pos(u))}
+        \tadOperacion{nombreSiguienteFan}{juego}{fantasma}{}
     \tadAxiomas[\paratodo{nat}{n, m}]
     \tadAlinearAxiomas{pred(suc($n$))}
     \tadAxioma{$0=0?$}{true}
