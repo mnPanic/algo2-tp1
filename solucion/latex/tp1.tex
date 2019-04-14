@@ -67,7 +67,7 @@
 \section{TAD \tadNombre{Juego}}
 \begin{tad}{\tadNombre{Juego}}
     \tadGeneros{juego}
-    \tadExporta{TODO}
+    \tadExporta{observadores, generadores, puntaje}
     \tadUsa{\tadNombre{Habitacion}}
 
     \tadIgualdadObservacional{j}{j'}{juego}{$(n=0? \igobs m=0?)\ \yluego$\\ $(\neg(n=0?) \impluego (\text{pred}(n) \igobs \text{pred}(m)))$}
@@ -112,6 +112,7 @@
     \tadOtrasOperaciones
         \tadOperacion{jugadores}{juego}{conj(pj)}{}
         \tadOperacion{fantasmas}{juego}{conj(fantasma)}{}
+        \tadOperacion{nombreSiguienteFan}{juego}{fantasma}{}
         \tadOperacion{puntaje}{juego}{nat}{}
         \tadOperacion{ronda}{juego}{nat}{}
         \tadOperacion{paso}{juego}{nat}{}
@@ -145,7 +146,6 @@
             {dicc(fantasma, secu(accion))}
             {esValida?(hab(j), pos(u))}
         \tadOperacion{generarAccionesFan}{juego/j, ubicacion/u, secu(accion)}{secu(accion)}{esValida?(hab(j), pos(u))}
-        \tadOperacion{nombreSiguienteFan}{juego}{fantasma}{}
 
     \tadAxiomas[\paratodo{pj}{p},\\
             \paratodo{conj(pj)}{pjs},\\
@@ -230,6 +230,7 @@
 
         \tadAxioma{jugadores(j)}{claves(accionesPJs(j))}
         \tadAxioma{fantasmas(j)}{claves(accionesFan(j))}
+        \tadAxioma{nombreSiguienteFan(j)}{\#(claves(accionesFan(j))) + 1}
 
         \tadAxioma{puntaje(j)}{ronda(j) - 1}
         \tadAxioma{ronda(j)}{\#(fantasmas(j))}
@@ -316,9 +317,6 @@
         }
 
         \tadAxioma{accionFan(j, f)}{obtener(accionesFan(j), f)[paso(j) \% obtener(accionesFan(j), f)]}
-
-        \tadAxioma{nombreSiguienteFan}{\#(claves(accionesFan(j))) + 1}
-
 \end{tad}
 
 \section{TAD \tadNombre{Habitacion}}
