@@ -312,7 +312,7 @@
 
 \textbf{TAD} \tadNombre{Fantasma} \textbf{ES} \tadNombre{Nat} \\ \\
 \textbf{TAD} \tadNombre{PJ} \textbf{ES} \tadNombre{Nat} \\ \\
-\textbf{TAD} \tadNombre{Posicion} \textbf{ES} \tadNombre{tupla(nat, nat)}
+\textbf{TAD} \tadNombre{Posicion} \textbf{ES} \tadNombre{Tupla(Nat, Nat)}
 
 \begin{tad}{\tadNombre{Nat} \textbf{extiende} \tadNombre{Nat}}
 
@@ -322,7 +322,7 @@
     \tadAxioma{n $\%$ m}{\textbf{if} n < \ m \textbf{then} n \textbf{else} (n - m) $\%$ m \textbf{fi}}
 \end{tad}
 
-\begin{tad}{\tadNombre{Ubicacion} \textbf{extiende} \tadNombre{tupla(posicion, direccion)}}
+\begin{tad}{\tadNombre{Ubicacion} \textbf{extiende} \tadNombre{Tupla(Posicion, Direccion)}}
 \tadOtrasOperaciones
     \tadOperacion{pos}{ubicacion}{posicion}{}
     \tadOperacion{dir}{ubicacion}{direccion}{}
