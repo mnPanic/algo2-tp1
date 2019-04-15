@@ -104,7 +104,7 @@
 \section{TAD \tadNombre{Juego}}
 \begin{tad}{\tadNombre{Juego}}
     \tadGeneros{juego}
-    \tadExporta{observadores, generadores, puntaje, ronda}
+    \tadExporta{juego, observadores, generadores, puntaje, ronda}
     \tadUsa{\tadNombre{Secuencia, Nat, Conjunto, Habitacion,  Ubicacion, \\
             PJ, Accion, Direccion, Fantasma, PJ, Diccionario, Bool}}
     \tadIgualdadObservacional{j}{j'}{juego}{
@@ -418,7 +418,7 @@
 \begin{tad}{\tadNombre{Accion}}
     \tadGeneros{accion}
     
-    \tadExporta{observadores, generadores, genero, otras operaciones}
+    \tadExporta{accion, observadores, generadores, genero, otras operaciones}
     \tadUsa{\tadNombre{Direccion, Posicion, Ubicacion, Bool, Conjunto, Habitacion, Secuencia}}
     \tadIgualdadObservacional{a}{a'}{accion}{
         esNada(a) $\igobs$ esNada(a') $\land$ \\
@@ -523,7 +523,7 @@
 \section{TAD \tadNombre{Direccion}}
 \begin{tad}{\tadNombre{Direccion}}
     \tadGeneros{direccion}
-    \tadExporta{observadores, generadores, otras operaciones}
+    \tadExporta{direccion, observadores, generadores, otras operaciones}
     \tadUsa{\tadNombre{Bool, Posicion, Nat}}
     \tadIgualdadObservacional{d}{d'}{direccion}{
         esArriba(d) $\igobs$ esArriba(d') $\land$ \\
