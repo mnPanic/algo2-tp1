@@ -127,7 +127,7 @@
         \tadOperacion{vivePJ?}{juego/j, pj/p}{bool}{p $\in$ jugadores(j)}
         \tadOperacion{viveFan?}{juego/j, fantasma/f}{bool}{f $\in$ fantasmas(j)}
         \tadOperacion{ubicacionInicialFan}{juego/j, fantasma/f}{ubicacion}{f $\in$ fantasmas(f)}
-        \tadOperacion{localizarJugadores}{juego}{dicc(pj, ubicacion)}{}
+        \tadOperacion{\textbf{localizarJugadores}}{juego}{dicc(pj, ubicacion)}{}
     
     \tadGeneradores
         \tadOperacion{iniciar}
@@ -316,7 +316,7 @@
 
         \tadAxioma{generarAccionesFan(j, uInicialPJ, as)}{
             as \\
-            \& (nada $\bullet$ nada $\bullet$ nada $\bullet$ nada $\bullet$ nada) \\
+            \& (\secuencia{nada $\bullet$ nada $\bullet$ nada $\bullet$ nada $\bullet$ nada}) \\
             \& invertir(hab(j), uInicialPJ, as)
         }
 
@@ -578,6 +578,21 @@
         \tadAxioma{esDerecha(izquierda)}{false}
         \tadAxioma{esDerecha(derecha)}{\textbf{true}}
 
-    
 \end{tad}{}
+
+\section{Decisiones tomadas}
+
+\begin{enumerate}
+    \item Asumimos la existencia de las operaciones localizarJugadores y esAlcanzable, entonces no las axiomatizamos.
+    \item Tomamos como validas dentro del juego habitaciones de 2x2 o mas, ya que sino nadie moriria.
+    \item Como los nombres de los fantasmas son Nat, el nombre del nuevo es el cardinal del el conjunto de fantasmas \text{+ 1}. 
+    Asi tambien se puede facilmente saber cual es el fantasma especial.
+
+    \item La accion mirar fue agregada para considerar el caso patologico del fantasma.
+    
+    Esta fue reestringida para que solo se pueda usar en ese caso.
+    
+    Esto llevo a la creacion del TAD Direccion como un desprendimiento de Accion.
+\end{enumerate}
+
 \end{document}
