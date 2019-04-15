@@ -69,7 +69,7 @@
 \begin{tad}{\tadNombre{Juego}}
     \tadGeneros{juego}
     \tadExporta{observadores, generadores, puntaje, ronda}
-    \tadUsa{\tadNombre{Secuencia, Nat, Conjunto, Habitacion, Tupla,  Ubicacion, \\
+    \tadUsa{\tadNombre{Secuencia, Nat, Conjunto, Habitacion,  Ubicacion, \\
             PJ, Accion, Direccion, Fantasma, PJ, Diccionario, Bool}}
     \tadIgualdadObservacional{j}{j'}{juego}{
         (accionesPJs(j) $\igobs$ accionesPJs(j')) $\land$ \\
@@ -381,7 +381,7 @@
     \tadGeneros{accion}
     
     \tadExporta{observadores, generadores, genero, otras operaciones}
-
+    \tadUsa{\tadNombre{Direccion, Posicion, Ubicacion, Bool, Conjunto, Habitacion, Secuencia}}
     \tadIgualdadObservacional{a}{a'}{accion}{
         esNada(a) $\igobs$ esNada(a') $\land$ \\
         esDisparar(a) $\igobs$ esDisparar(a') $\land$ \\
@@ -407,13 +407,18 @@
         \tadOperacion{nada}{}{accion}{}
 
     \tadOtrasOperaciones
-        \tadOperacion{ubicacionLuegoDe}{accion,hab/h,ubicacion/u}{conj(pos)}{esValida?(h, pos(u))}
-        \tadOperacion{posicionesAfectadasPor}{accion,hab/h,ubicacion/u}{conj(pos)}{esValida?(h, pos(u))}
+        \tadOperacion{ubicacionLuegoDe}{accion,hab/h,ubicacion/u}{conj(posicion)}{esValida?(h, pos(u))}
+        \tadOperacion{posicionesAfectadasPor}{accion,hab/h,ubicacion/u}{conj(posicion)}{esValida?(h, pos(u))}
         \tadOperacion{$\neg$ \argumento}{accion}{accion}{}
         \tadOperacion{invertir}{hab/h,ubicacion/u,secu(accion)}{secu(accion)}{esValida?(h, pos(u))}
 
     \tadAlinearAxiomas{posicionesAfectadasPor(mover(d), h, u)}
-    \tadAxiomas[\paratodo{nat}{n, m}, \paratodo{ubicacion}{u}, \paratodo{habitacion}{a}]
+    \tadAxiomas[
+            \paratodo{direccion}{d}
+            \paratodo{ubicacion}{u}, 
+            \paratodo{habitacion}{a},
+            \paratodo{secu(accion)}{as}
+        ]
         \tadAxioma{posicionesAfectadasPor(mover(d), h, u)}{$\emptyset$}
         \tadAxioma{posicionesAfectadasPor(mirar(d), h, u)}{$\emptyset$}
         \tadAxioma{posicionesAfectadasPor(nada, h, u)}{$\emptyset$}
@@ -429,7 +434,7 @@
 
         \tadAxioma{invertir(h, u, as)}{
             \ifCustom
-                {vacia?(as}
+                {vacia?(as)}
                 {\secuencia{}}
                 {\\
                  invertir(h, ubicacionLuegoDe(prim(as), h, u), fin(as)) \circulito \\
@@ -481,6 +486,7 @@
 \begin{tad}{\tadNombre{Direccion}}
     \tadGeneros{direccion}
     \tadExporta{observadores, generadores, otras operaciones}
+    \tadUsa{\tadNombre{Bool, Posicion, Nat}}
     \tadIgualdadObservacional{d}{d'}{direccion}{
         esArriba(d) $\igobs$ esArriba(d') $\land$ \\
         esAbajo(d) $\igobs$ esAbajo(d') $\land$ \\
