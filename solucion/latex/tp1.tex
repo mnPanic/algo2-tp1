@@ -193,7 +193,6 @@
             \paratodo{accion}{a},\\
             \paratodo{secu(accion)}{as}
         ]
-        % TODO: Alinear
         \tadAlinearAxiomas{ubicacionInicialFan(iniciar(pjs, as, u, h))}
 
         % Observadores
@@ -378,9 +377,13 @@
     \tadOperacion{esConexa?}{hab}{bool}{}
     \tadOperacion{tamano}{hab}{nat}{}
     \tadOperacion{posiciones}{hab}{conj(posicion)}{}
+    \tadOperacion{darPosiciones}{hab, nat, nat, nat}{conj(posicion)}{}
     \tadOperacion{posicionesLibres}{hab/h,conj(posicion)/ps}{conj(posicion)}{ps $\subseteq$ posiciones(h)}
     \tadOperacion{verificarAlcance}{hab/h,conj(posicion)/ps}{bool}{ps $\subseteq$ posiciones(h)}
     \tadOperacion{verificarAlcancePos}{hab/h,conj(posicion)/ps,posicion/p}{bool}{ps $\subseteq$ posiciones(h) $\land$ p $\in$ posiciones(h)}
+    \tadOperacion{\textbf{esAlcanzable}}{hab/h, pos/p, pos/p'}{bool}
+        {esValida?(h, p) $\land$ esValida?(h, p') $\yluego$ \\
+         ($\neg$ estaOcupada?(h, p) $\land$ $\neg$ estaOcupada?(h, p))}
 
 \tadAlinearFunciones{estaOcupada?(ocupar(h,p'),p)}{}
 
