@@ -387,10 +387,11 @@
         esDisparar(a) $\igobs$ esDisparar(a') $\land$ \\
         esMover(a) $\igobs$ esMover(a') $\land$ \\
         esMirar(a) $\igobs$ esMirar(a') $\land$ \\
-        ((esMover(a) $\lor$ esMirar(a)) $\impluego$ direccion(a) $\igobs$ direccion(a'))
+        ((esMover(a) $\lor$ esMirar(a)) $\impluego$ \\ 
+         direccion(a) $\igobs$ direccion(a'))
     }
 
-    \tadAlinearFunciones{posicionesAfectadasPor}{hab/h,ubicacion/u,secu(accion)}{secu(accion)}{}
+    \tadAlinearFunciones{posicionesAfectadasPor}{hab/h,ubicacion/u,secu(accion)}{}{}
     
     \tadObservadores
         \tadOperacion{esMover}{accion}{bool}{}
