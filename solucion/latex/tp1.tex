@@ -549,12 +549,15 @@
 \end{tad}
 
 \begin{tad}{\tadNombre{Ubicacion} \textbf{extiende} \tadNombre{Tupla(Posicion, Direccion)}}
-\tadOtrasOperaciones
-    \tadOperacion{pos}{ubicacion}{posicion}{}
-    \tadOperacion{dir}{ubicacion}{direccion}{}
+    \tadOtrasOperaciones
+        \tadAlinearFunciones{pos}{ubicacion}{direccion}
+        \tadOperacion{pos}{ubicacion}{posicion}{}
+        \tadOperacion{dir}{ubicacion}{direccion}{}
+
     \tadAxiomas[\paratodo{ubicacion}{u}]
-    \tadAxioma{pos(u)}{$\Pi_1$(u)}
-    \tadAxioma{dir(u)}{$\Pi_2$(u)}
+        \tadAlinearAxiomas{pos(u)}
+        \tadAxioma{pos(u)}{$\Pi_1$(u)}
+        \tadAxioma{dir(u)}{$\Pi_2$(u)}
 \end{tad}
 
 \begin{tad}{\tadNombre{Secuencia} \textbf{extiende} \tadNombre{Secuencia}}
