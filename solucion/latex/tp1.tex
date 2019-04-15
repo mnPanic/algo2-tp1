@@ -65,6 +65,42 @@
 
 % TADs
 
+\section{\tadNombre{Extensiones y Renombres}}
+
+\textbf{TAD} \tadNombre{Fantasma} \textbf{ES} \tadNombre{Nat} \\ \\
+\textbf{TAD} \tadNombre{PJ} \textbf{ES} \tadNombre{Nat} \\ \\
+\textbf{TAD} \tadNombre{Posicion} \textbf{ES} \tadNombre{Tupla(Nat, Nat)}
+
+\begin{tad}{\tadNombre{Nat} \textbf{extiende} \tadNombre{Nat}}
+
+\tadOtrasOperaciones
+    \tadOperacion{$\bullet \ \% \ \bullet$}{nat, nat}{nat}{}
+    \tadAxiomas[\paratodo{nat}{n,m}]
+    \tadAxioma{n $\%$ m}{\textbf{if} n < \ m \textbf{then} n \textbf{else} (n - m) $\%$ m \textbf{fi}}
+\end{tad}
+
+\begin{tad}{\tadNombre{Ubicacion} \textbf{extiende} \tadNombre{Tupla(Posicion, Direccion)}}
+    \tadOtrasOperaciones
+        \tadAlinearFunciones{pos}{ubicacion}{direccion}
+        \tadOperacion{pos}{ubicacion}{posicion}{}
+        \tadOperacion{dir}{ubicacion}{direccion}{}
+
+    \tadAxiomas[\paratodo{ubicacion}{u}]
+        \tadAlinearAxiomas{pos(u)}
+        \tadAxioma{pos(u)}{$\Pi_1$(u)}
+        \tadAxioma{dir(u)}{$\Pi_2$(u)}
+\end{tad}
+
+\begin{tad}{\tadNombre{Secuencia} \textbf{extiende} \tadNombre{Secuencia}}
+\tadOtrasOperaciones
+    \tadOperacion{$\bullet[\bullet]$}{secu($\alpha$)/s, nat/i}{$\alpha$}{i < \ long(s)}
+    \tadAxiomas[\paratodo{secu($\alpha$)}{s}, \paratodo{nat}{i}]
+    \tadAxioma{s$[i]$}{\textbf{if} $i = 0?$ \textbf{then} prim(s) \textbf{else} fin(s)$[i - 1]$ \textbf{fi}}
+\end{tad}
+
+
+\newpage
+
 \section{TAD \tadNombre{Juego}}
 \begin{tad}{\tadNombre{Juego}}
     \tadGeneros{juego}
@@ -376,6 +412,8 @@
 
 \end{tad}
 
+\newpage
+
 \section{TAD \tadNombre{Accion}}
 \begin{tad}{\tadNombre{Accion}}
     \tadGeneros{accion}
@@ -539,39 +577,4 @@
 
     
 \end{tad}{}
-
-\section{\tadNombre{Extensiones y Renombres}}
-
-\textbf{TAD} \tadNombre{Fantasma} \textbf{ES} \tadNombre{Nat} \\ \\
-\textbf{TAD} \tadNombre{PJ} \textbf{ES} \tadNombre{Nat} \\ \\
-\textbf{TAD} \tadNombre{Posicion} \textbf{ES} \tadNombre{Tupla(Nat, Nat)}
-
-\begin{tad}{\tadNombre{Nat} \textbf{extiende} \tadNombre{Nat}}
-
-\tadOtrasOperaciones
-    \tadOperacion{$\bullet \ \% \ \bullet$}{nat, nat}{nat}{}
-    \tadAxiomas[\paratodo{nat}{n,m}]
-    \tadAxioma{n $\%$ m}{\textbf{if} n < \ m \textbf{then} n \textbf{else} (n - m) $\%$ m \textbf{fi}}
-\end{tad}
-
-\begin{tad}{\tadNombre{Ubicacion} \textbf{extiende} \tadNombre{Tupla(Posicion, Direccion)}}
-    \tadOtrasOperaciones
-        \tadAlinearFunciones{pos}{ubicacion}{direccion}
-        \tadOperacion{pos}{ubicacion}{posicion}{}
-        \tadOperacion{dir}{ubicacion}{direccion}{}
-
-    \tadAxiomas[\paratodo{ubicacion}{u}]
-        \tadAlinearAxiomas{pos(u)}
-        \tadAxioma{pos(u)}{$\Pi_1$(u)}
-        \tadAxioma{dir(u)}{$\Pi_2$(u)}
-\end{tad}
-
-\begin{tad}{\tadNombre{Secuencia} \textbf{extiende} \tadNombre{Secuencia}}
-\tadOtrasOperaciones
-    \tadOperacion{$\bullet[\bullet]$}{secu($\alpha$)/s, nat/i}{$\alpha$}{i < \ long(s)}
-    \tadAxiomas[\paratodo{secu($\alpha$)}{s}, \paratodo{nat}{i}]
-    \tadAxioma{s$[i]$}{\textbf{if} $i = 0?$ \textbf{then} prim(s) \textbf{else} fin(s)$[i - 1]$ \textbf{fi}}
-\end{tad}
-
-
 \end{document}
